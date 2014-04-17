@@ -32,6 +32,9 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 
 	$(hide) ln -f $(INSTALLED_BOOTIMAGE_TARGET) $(PRODUCT_OUT)/boot.elf
 
+	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
+	$(hide) cp -r vendor/sony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
+
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 	$(recovery_ramdisk) \
