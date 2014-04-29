@@ -26,15 +26,10 @@ on init
 
     mkdir /mnt/shell/emulated 0700 shell shell
     mkdir /storage/emulated 0555 root root
-
-    mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
     mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
-    mkdir /storage/usbdisk 0000 system system
     mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
-
-    mkdir /storage/sdcard0 0700 root root
-    mkdir /storage/sdcard1 0700 root root
-    mkdir /storage/usbdisk 0700 root root
+    mkdir /storage/sdcard1 0775 system system
+    mkdir /storage/usbdisk 0775 system system
 
     export EXTERNAL_STORAGE /storage/emulated/legacy
     export SECONDARY_STORAGE /storage/sdcard1
@@ -79,7 +74,6 @@ on fs
     # SEMC: Start the TrimArea Daemon and early TA-users
     class_start trimarea
     exec /sbin/wait4tad_static
-    exec /sbin/mr
     exec /system/bin/taimport
     start ta_qmi_service
 
@@ -90,7 +84,6 @@ on fs
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
     setrlimit 8 67108864 67108864
-    exec /system/bin/sh /init.qcom.early_boot.sh ${ro.board.platform}
     exec /system/bin/sh /init.qcom.syspart_fixup.sh ${ro.board.platform} ${ro.serialno}
 
     # Permissions for AKM897x sensor
@@ -113,7 +106,7 @@ on boot
     # Install exfat module to support exfat file system
     insmod /system/lib/modules/texfat.ko
 
-    # CPU governors // I/O schedulers 
+    # load custom kernel modules
     insmod /system/lib/modules/cpufreq_wheatley.ko
     insmod /system/lib/modules/sio-iosched.ko
 
@@ -234,14 +227,11 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
-    # Flash storage isn't a good entropy source, and only causes locking
-    # overhead in the kernel. Turn it off.
-    write /sys/block/mmcblk0/queue/add_random 0
-
     exec /system/bin/cal_data_manager init
 
 # msm specific files that need to be created on /data
 on post-fs-data
+
     mkdir /data/pc 700 radio radio
     mkdir /data/tombstones 0771 system system
     mkdir /data/tombstones/vendor 0771 system system
@@ -347,34 +337,25 @@ on post-fs-data
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/online 1
 
-    # ondemand
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "ondemand"
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "ondemand"
-    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate 50000
-    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold 90
-    write /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy 1
-    write /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor 4
-    write /sys/devices/system/cpu/cpufreq/ondemand/down_differential 10
-    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_multi_core 70
-    write /sys/devices/system/cpu/cpufreq/ondemand/down_differential_multi_core 3
-    write /sys/devices/system/cpu/cpufreq/ondemand/optimal_freq 918000
-    write /sys/devices/system/cpu/cpufreq/ondemand/sync_freq 1026000
-    write /sys/devices/system/cpu/cpufreq/ondemand/up_threshold_any_cpu_load 80
-    chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_rate
-    chown system /sys/devices/system/cpu/cpufreq/ondemand/sampling_down_factor
-    chown system /sys/devices/system/cpu/cpufreq/ondemand/io_is_busy
+    # interactive
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
+    chown -h system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown -h system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown -h system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown -h system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
 
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+    chown -h system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown -h system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown -h system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    chown -h system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
     write /sys/module/msm_thermal/core_control/enabled 1
-    chown root system /sys/devices/system/cpu/mfreq
-    chmod 220 /sys/devices/system/cpu/mfreq
-    chown root system /sys/devices/system/cpu/cpu1/online
-    chmod 664 /sys/devices/system/cpu/cpu1/online
+    chown -h root.system /sys/devices/system/cpu/mfreq
+    chmod -h 220 /sys/devices/system/cpu/mfreq
+    chown -h root.system /sys/devices/system/cpu/cpu1/online
+    chmod -h 664 /sys/devices/system/cpu/cpu1/online
     # set DCVS parameters for CPU
     write /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us 40000
     write /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us 40000
@@ -404,15 +385,15 @@ on post-fs-data
     write /sys/module/msm_mpdecision/mp_em_rounding_point_min 10
     write /sys/module/msm_mpdecision/mp_em_rounding_point_max 85
     write /sys/module/msm_mpdecision/iowait_threshold_pct 50
-    # set permissions for the nodes needed by display on/off hook
-    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chown system /sys/module/msm_mpdecision/slack_time_max_us
-    chown system /sys/module/msm_mpdecision/slack_time_min_us
-    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
-    chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
+    #set permissions for the nodes needed by display on/off hook
+    chown -h system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+    chown -h system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+    chown -h system /sys/module/msm_mpdecision/slack_time_max_us
+    chown -h system /sys/module/msm_mpdecision/slack_time_min_us
+    chmod -h 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+    chmod -h 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+    chmod -h 664 /sys/module/msm_mpdecision/slack_time_max_us
+    chmod -h 664 /sys/module/msm_mpdecision/slack_time_min_us
 
     write /sys/devices/platform/msm_sdcc.3/idle_timeout 10
 
@@ -458,14 +439,6 @@ service rmt_storage /system/bin/rmt_storage
 
 on property:ro.boot.emmc=true
     start rmt_storage
-
-# Fast Dormancy
-service fast-dormancy /system/bin/fast-dormancy
-    class late_start
-    disabled
-
-on property:ro.semc.enable.fast_dormancy=false
-    stop fast-dormancy
 
 # Update WIFI MAC address
 service mac-update /system/bin/mac-update
@@ -623,6 +596,48 @@ service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
+service gpsone_daemon /system/bin/gpsone_daemon
+    class late_start
+    user gps
+    group gps qcom_oncrpc inet net_raw
+    disabled
+
+service quipc_igsn /system/bin/quipc_igsn
+    class late_start
+    user gps
+    group inet gps
+    disabled
+
+service quipc_main /system/bin/quipc_main
+    class late_start
+    user gps
+    group gps net_admin wifi inet
+    disabled
+
+service location_mq /system/bin/location-mq
+    class late_start
+    user gps
+    group gps
+    disabled
+
+service xtwifi_inet /system/bin/xtwifi-inet-agent
+    class late_start
+    user gps
+    group inet gps
+    disabled
+
+service xtwifi_client /system/bin/xtwifi-client
+    class late_start
+    user gps
+    group net_admin wifi inet gps
+    disabled
+
+service lowi-server /system/bin/lowi-server
+    class late_start
+    user gps
+    group gps net_admin wifi inet
+    disabled
+
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
@@ -638,6 +653,12 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard1
 service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
     class late_start
     disabled
+
+service thermald /system/bin/thermald
+   class main
+   user root
+   group root
+   disabled
 
 service thermal-engine /system/bin/thermal-engine
    class main
@@ -660,14 +681,6 @@ service system_monitor /system/bin/system_monitor
 service mpdecision /system/bin/mpdecision --no_sleep --avg_comp
    user root
    disabled
-
-# bugreport is triggered by holding down volume down, volume up and power
-#service bugreport /system/bin/dumpstate -d -p -B \
-#        -o /data/data/com.android.shell/files/bugreports/bugreport
-#    class main
-#    disabled
-#    oneshot
-#    keycodes 114 115 116
 
 service fm_dl /system/bin/sh /system/etc/init.qcom.fm.sh
     class late_start
@@ -698,3 +711,11 @@ on property:init.svc.surfaceflinger=running
 
 on property:init.svc.surfaceflinger=stopped
     stop ppd
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116

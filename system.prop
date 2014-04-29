@@ -1,5 +1,8 @@
 #
-# Huashan
+# from device/somc/viskan/system.prop
+#
+#
+# system.prop for surf
 #
 
 # Sony props
@@ -7,62 +10,39 @@ ro.semc.version.cust=1272-3352
 ro.semc.version.cust_revision=R1B
 ro.somc.customerid=8242
 ro.semc.content.number=PA5
-ro.semc.version.fs_revision=12.1.A.0.266
+ro.semc.version.fs_revision=12.1.A.1.201
 ro.semc.product.model=C5303
 ro.semc.ms_type_id=PM-0350-BV
 ro.semc.version.fs=GLOBAL-LTE
 ro.semc.product.name=Xperia SP
 ro.semc.product.device=C53
 
-# Our /cache is big enough to dexopt /system apps to it.
-dalvik.vm.dexopt-data-only=0
+# RIL
+rild.libpath=/system/lib/libril-qc-qmi-1.so
+telephony.lteOnCdmaDevice=0
+telephony.lteOnGsmDevice=1
+ro.telephony.default_network=9
+ro.use_data_netmgrd=true
 
-# Graphics
-ro.sf.lcd_density=320
-ro.hwui.text_cache_width=2048
+lpa.decode=true
 
-# System prop for HDMI screen rotation lock
-persist.demo.hdmirotationlock=true
+#system props for time-services
+persist.timed.enable=true
 
-# Audio
+# System props for audio
 persist.audio.fluence.mode=endfire
-persist.audio.vr.enable=false
 persist.audio.handset.mic=analog
 persist.audio.lowlatency.rec=false
+
+# System prop to select audio resampler quality
 af.resampler.quality=255
-mpq.audio.decode=true
 
-# RIL
-ro.telephony.call_ring.multiple=0
-ro.ril.transmitpower=true
-telephony.lteOnCdmaDevice=0
-ro.telephony.default_network=0
-
-# Netmgrd
-ro.use_data_netmgrd=true
-persist.rmnet.mux=disabled
-
-# BT
-ro.qualcomm.bt.hci_transport=smd
-
-# snapdragon value add features
-ro.qc.sdk.audio.ssr=false
-ro.qc.sdk.audio.fluencetype=none
-ro.qc.sdk.camera.facialproc=true
-ro.qc.sdk.gestures.camera=false
-ro.qc.sdk.sensors.gestures=false
-
-# NFC
-ro.nfc.on.default=true
-ro.nfc.se.sim.enable=true
-ro.nfc.se.smx.enable=false
-ro.nfc.icon.enable=false
-ro.nfc.vendor.name=nxp
-ro.nfc.limitation.camera=false
-
-# GPS
+#system prop for switching gps driver to qmi
 persist.gps.qmienabled=true
 
-# stirctmode
-#persist.sys.strictmode.visual=0
-#persist.sys.strictmode.disable=1
+#
+# System prop for sending transmit power request to RIL during WiFi hotspot on/off
+#
+ro.ril.transmitpower=true
+##fluencetype can be "fluence" or "fluencepro" or "none"
+ro.qc.sdk.audio.fluencetype=none
