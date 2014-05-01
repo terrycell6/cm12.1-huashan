@@ -1,8 +1,5 @@
 #
-# from device/somc/viskan/system.prop
-#
-#
-# system.prop for surf
+# Huashan
 #
 
 # Sony props
@@ -17,32 +14,60 @@ ro.semc.version.fs=GLOBAL-LTE
 ro.semc.product.name=Xperia SP
 ro.semc.product.device=C53
 
-# RIL
-rild.libpath=/system/lib/libril-qc-qmi-1.so
-telephony.lteOnCdmaDevice=0
-telephony.lteOnGsmDevice=1
-ro.telephony.default_network=9
-ro.use_data_netmgrd=true
-
-lpa.decode=true
-
 #system props for time-services
 persist.timed.enable=true
 
-# System props for audio
+# Graphics
+ro.sf.lcd_density=320
+
+# Audio
 persist.audio.fluence.mode=endfire
 persist.audio.handset.mic=analog
 persist.audio.lowlatency.rec=false
+lpa.decode=true
 
 # System prop to select audio resampler quality
 af.resampler.quality=255
 
-#system prop for switching gps driver to qmi
-persist.gps.qmienabled=true
-
-#
-# System prop for sending transmit power request to RIL during WiFi hotspot on/off
-#
-ro.ril.transmitpower=true
 ##fluencetype can be "fluence" or "fluencepro" or "none"
 ro.qc.sdk.audio.fluencetype=none
+
+# Enable AAC 5.1 output
+media.aac_51_output_enabled=true
+
+# Hardware codecs
+qcom.hw.aac.encoder=true
+
+# RIL
+rild.libpath=/system/lib/libril-qc-qmi-1.so
+ro.telephony.call_ring.multiple=0
+persist.radio.apm_sim_not_pwdn=1
+persist.radio.add_power_save=1
+ro.ril.transmitpower=true
+telephony.lteOnCdmaDevice=0
+telephony.lteOnGsmDevice=1
+ro.telephony.default_network=9
+
+# Netmgrd
+ro.use_data_netmgrd=true
+persist.rmnet.mux=disabled
+
+# BT
+ro.qualcomm.bt.hci_transport=smd
+
+# GPS
+persist.gps.qmienabled=true
+
+# QCOM Location
+ro.qc.sdk.izat.premium_enabled=0
+ro.qc.sdk.izat.service_mask=0x4
+persist.gps.qc_nlp_in_use=0
+ro.gps.agps_provider=1
+ro.service.swiqi2.supported=true
+persist.service.swiqi2.enable=1
+
+# stirctmode
+persist.sys.strictmode.visual=0
+persist.sys.strictmode.disable=1
+
+ro.kernel.android.checkjni=0

@@ -129,10 +129,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     mac-update
 
-#FM Radio for sony device
-PRODUCT_PACKAGES += \
-    FmRadio
-
 # Miscellaneous
 PRODUCT_PACKAGES += \
     librs_jni \
@@ -151,45 +147,16 @@ PRODUCT_PACKAGES += \
 # We have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
+# Set default USB interface
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    persist.sys.usb.config=mtp
+
 # semc
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.semc.version.sw=1272-3352 \
     ro.semc.version.sw_revision=12.1.A.1.201 \
     ro.semc.version.sw_variant=GENERIC \
     ro.semc.version.sw_type=user \
-
-# Bluetooth
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qualcomm.bt.hci_transport=smd
-
-# Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=320
-
-# QCOM Location
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.izat.premium_enabled=0 \
-    ro.qc.sdk.izat.service_mask=0x4 \
-    persist.gps.qc_nlp_in_use=0 \
-    ro.gps.agps_provider=1 \
-    ro.service.swiqi2.supported=true \
-    persist.service.swiqi2.enable=1
-
-# Set default USB interface
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp
-
-# Radio and Telephony
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.add_power_save=1
-
-# Do not power down SIM card when modem is sent to Low Power Mode.
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.apm_sim_not_pwdn=1
-
-# Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.call_ring.multiple=0
 
 # call dalvik heap config
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
