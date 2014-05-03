@@ -76,8 +76,6 @@ on fs
     exec /system/bin/taimport
     start ta_qmi_service
 
-    restorecon -R /data/etc
-
     # SEMC: Remote storage service should be started after master reset
     # due to that the modem file system is formatted in the master reset
     start rmt_storage
