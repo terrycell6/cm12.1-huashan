@@ -18,9 +18,8 @@ import init.device.rc
 import init.sony.usb.rc
 
 on early-init
-    mkdir /firmware 0771 system system
-    mkdir /persist 0771 system system
     mount debugfs debugfs /sys/kernel/debug
+    symlink /data/tombstones /tombstones
 
 on init
 
@@ -48,15 +47,8 @@ on init
 
     symlink /dev/socket /tmp
 
-    chmod 0664 /proc/rdtag
-    chown root system /proc/rdtag
-
     mkdir /dev/bus 0755 root root
     mkdir /dev/bus/usb 0755 root root
-
-    write /sys/module/subsystem_restart/parameters/restart_level 3
-    write /sys/module/subsystem_restart/parameters/max_restarts 8
-    write /sys/module/subsystem_restart/parameters/max_history_time 3600
 
 on fs
     mount_all ./fstab.qcom
@@ -76,9 +68,13 @@ on fs
     exec /system/bin/taimport
     start ta_qmi_service
 
-    # SEMC: Remote storage service should be started after master reset
-    # due to that the modem file system is formatted in the master reset
-    start rmt_storage
+    restorecon /data/etc/bluetooth_bdaddr
+    restorecon /data/etc/wlan_macaddr0
+    restorecon /data/etc/wlan_macaddr1
+    restorecon /data/etc/wlan_macaddr2
+    restorecon /data/etc/wlan_macaddr3
+    restorecon /data/misc/audio/mbhc.bin
+    restorecon /data/misc/audio/wcd9310_anc.bin
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -130,9 +126,6 @@ on boot
     chmod 2770 /dev/socket/qmux_bluetooth
     mkdir /dev/socket/qmux_gps 0770 gps gps
     chmod 2770 /dev/socket/qmux_gps
-
-    # Allow QMUX daemon to assign port open wait time
-    chown radio radio /sys/devices/virtual/hsicctl/hsicctl0/modem_wait
 
     setprop ro.telephony.call_ring.multiple false
 
@@ -189,9 +182,6 @@ on boot
     # 4.3 requires this
     chmod 0644 /proc/cmdline
 
-    # Enable DEBUG_SUSPEND, DEBUG_EXIT_SUSPEND, and DEBUG_WAKEUP
-    write /sys/module/wakelock/parameters/debug_mask 7
-
     #To allow interfaces to get v6 address when tethering is enabled
     write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
     write /proc/sys/net/ipv6/conf/rmnet1/accept_ra 2
@@ -227,18 +217,15 @@ on boot
 # msm specific files that need to be created on /data
 on post-fs-data
 
-    mkdir /data/pc 700 radio radio
+    mkdir /data/media 0770 media_rw media_rw
+
     mkdir /data/tombstones 0771 system system
-    mkdir /data/tombstones/vendor 0771 system system
-    symlink /data/tombstones /tombstones
     mkdir /tombstones/modem 0771 system system
     mkdir /tombstones/lpass 0771 system system
     mkdir /tombstones/wcnss 0771 system system
     mkdir /tombstones/dsps 0771 system system
     mkdir /tombstones/mdm 0771 system system
     mkdir /tombstones/mdm2 0771 system system
-
-    mkdir /data/media 0770 media_rw media_rw
 
     # NFC local data and nfcee xml storage
     mkdir /data/nfc 0770 nfc nfc
@@ -318,8 +305,8 @@ on post-fs-data
     # Enable Power modes and set the CPU Freq Sampling rates
     write /sys/module/rpm_resources/enable_low_power/L2_cache 1
     write /sys/module/rpm_resources/enable_low_power/pxo 1
-    write /sys/module/rpm_resources/enable_low_power/vdd_dig 2
-    write /sys/module/rpm_resources/enable_low_power/vdd_mem 2
+    write /sys/module/rpm_resources/enable_low_power/vdd_dig 1
+    write /sys/module/rpm_resources/enable_low_power/vdd_mem 1
     write /sys/module/pm_8x60/modes/cpu0/retention/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu1/retention/idle_enabled 1
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/suspend_enabled 1
@@ -331,26 +318,30 @@ on post-fs-data
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/online 1
+    start mpdecision
 
     # interactive
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
-    chown -h system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
-    chown -h system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
-    chown -h system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
-    chown -h system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 1026000
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
+    chown system /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq
+    chown system /sys/devices/system/cpu/cpufreq/interactive/timer_rate
+    chown system /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load
+    chown system /sys/devices/system/cpu/cpufreq/interactive/boostpulse
 
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
-    chown -h system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
-    chown -h system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
-    chown -h system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
-    chown -h system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
+    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
     write /sys/module/msm_thermal/core_control/enabled 1
-    chown -h root.system /sys/devices/system/cpu/mfreq
-    chmod -h 220 /sys/devices/system/cpu/mfreq
-    chown -h root.system /sys/devices/system/cpu/cpu1/online
-    chmod -h 664 /sys/devices/system/cpu/cpu1/online
+    chown root system /sys/devices/system/cpu/mfreq
+    chmod 220 /sys/devices/system/cpu/mfreq
+    chown root system /sys/devices/system/cpu/cpu1/online
+    chmod 664 /sys/devices/system/cpu/cpu1/online
+
     # set DCVS parameters for CPU
     write /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us 40000
     write /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us 40000
@@ -380,15 +371,15 @@ on post-fs-data
     write /sys/module/msm_mpdecision/mp_em_rounding_point_min 10
     write /sys/module/msm_mpdecision/mp_em_rounding_point_max 85
     write /sys/module/msm_mpdecision/iowait_threshold_pct 50
-    #set permissions for the nodes needed by display on/off hook
-    chown -h system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chown -h system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chown -h system /sys/module/msm_mpdecision/slack_time_max_us
-    chown -h system /sys/module/msm_mpdecision/slack_time_min_us
-    chmod -h 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
-    chmod -h 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
-    chmod -h 664 /sys/module/msm_mpdecision/slack_time_max_us
-    chmod -h 664 /sys/module/msm_mpdecision/slack_time_min_us
+    # set permissions for the nodes needed by display on/off hook
+    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+    chown system /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+    chown system /sys/module/msm_mpdecision/slack_time_max_us
+    chown system /sys/module/msm_mpdecision/slack_time_min_us
+    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_max_us
+    chmod 664 /sys/module/msm_dcvs/cores/cpu0/slack_time_min_us
+    chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
+    chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
 
     write /sys/devices/platform/msm_sdcc.3/idle_timeout 10
 
@@ -430,10 +421,6 @@ service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/etc/sec_config"
 service rmt_storage /system/bin/rmt_storage
     class core
     user root
-    disabled
-
-on property:ro.boot.emmc=true
-    start rmt_storage
 
 # Update WIFI MAC address
 service mac-update /system/bin/mac-update
@@ -454,17 +441,11 @@ on property:bluetooth.hciattach=true
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
 
-service qmiproxy /system/bin/qmiproxy
-    class main
-    user radio
-    group radio qcom_diag
-    disabled
-
 # QMUX must be in multiple groups to support external process connections
 service qmuxd /system/bin/qmuxd
     class main
     user radio
-    group radio audio bluetooth gps qcom_diag
+    group radio audio bluetooth gps qcom_diag net_bt_stack
 
 #Sony: TrimArea Daemon
 # last 2 args: start block(blk size 128k), number of blocks(partitionsize(kb) /128(kb))
@@ -491,6 +472,12 @@ service secchand /system/bin/secchand
 
 service netmgrd /system/bin/netmgrd
     class main
+
+# start GNSS/Sensor interface daemon
+service gsiff_daemon /system/bin/gsiff_daemon
+    class late_start
+    user system
+    group gps qcom_oncrpc net_raw
 
 service qrngd /system/bin/qrngd -f
     class main
@@ -565,48 +552,6 @@ service dhcpcd_bnep0 /system/bin/dhcpcd -BKLG
     disabled
     oneshot
 
-service gpsone_daemon /system/bin/gpsone_daemon
-    class late_start
-    user gps
-    group gps qcom_oncrpc inet net_raw
-    disabled
-
-service quipc_igsn /system/bin/quipc_igsn
-    class late_start
-    user gps
-    group inet gps
-    disabled
-
-service quipc_main /system/bin/quipc_main
-    class late_start
-    user gps
-    group gps net_admin wifi inet
-    disabled
-
-service location_mq /system/bin/location-mq
-    class late_start
-    user gps
-    group gps
-    disabled
-
-service xtwifi_inet /system/bin/xtwifi-inet-agent
-    class late_start
-    user gps
-    group inet gps
-    disabled
-
-service xtwifi_client /system/bin/xtwifi-client
-    class late_start
-    user gps
-    group net_admin wifi inet gps
-    disabled
-
-service lowi-server /system/bin/lowi-server
-    class late_start
-    user gps
-    group gps net_admin wifi inet
-    disabled
-
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
@@ -670,17 +615,25 @@ service illumination /system/bin/illumination_service
     user root
 
 service time_daemon /system/bin/time_daemon
-    user system
-    group system qcom_oncrpc
-    oneshot
-    disabled
-
-on property:init.svc.surfaceflinger=running
-    start ppd
-
-on property:init.svc.surfaceflinger=stopped
-    stop ppd
+    class late_start
+    user root
+    group root
 
 # Xperia SP glove mod enabled
 on property:sys.boot_completed=1
     write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity 0
+
+on property:sys.perf.profile=0
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "ondemand"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "ondemand"
+    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy/trustzone "ondemand"
+
+on property:sys.perf.profile=1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
+    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy/trustzone "ondemand"
+
+on property:sys.perf.profile=2
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "performance"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "performance"
+    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy/trustzone "performance"

@@ -18,6 +18,7 @@ ro.semc.product.device=C53
 persist.timed.enable=true
 
 # Graphics
+debug.composition.type=c2d
 ro.sf.lcd_density=320
 
 # Audio
@@ -54,6 +55,7 @@ persist.rmnet.mux=disabled
 
 # BT
 ro.qualcomm.bt.hci_transport=smd
+qcom.bt.le_dev_pwr_class=1
 
 # GPS
 persist.gps.qmienabled=true
@@ -63,5 +65,3 @@ ro.qc.sdk.izat.premium_enabled=0
 ro.qc.sdk.izat.service_mask=0x4
 persist.gps.qc_nlp_in_use=0
 ro.gps.agps_provider=1
-ro.service.swiqi2.supported=true
-persist.service.swiqi2.enable=1
