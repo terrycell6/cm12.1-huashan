@@ -314,7 +314,6 @@ on post-fs-data
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/online 1
-    start mpdecision
 
     # interactive
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
@@ -378,6 +377,8 @@ on post-fs-data
     chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
 
     write /sys/devices/platform/msm_sdcc.3/idle_timeout 10
+
+    start mpdecision
 
 on charger
     # Enable Power modes and set the CPU Freq Sampling rates
@@ -620,6 +621,7 @@ on property:sys.boot_completed=1
     write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity 0
 
 on property:sys.perf.profile=0
+    start mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "ondemand"
@@ -627,6 +629,7 @@ on property:sys.perf.profile=0
     write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy/trustzone "ondemand"
 
 on property:sys.perf.profile=1
+    start mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
@@ -634,6 +637,7 @@ on property:sys.perf.profile=1
     write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy/trustzone "ondemand"
 
 on property:sys.perf.profile=2
+    stop mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "performance"
