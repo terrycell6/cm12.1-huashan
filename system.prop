@@ -18,7 +18,6 @@ ro.semc.product.device=C53
 persist.timed.enable=true
 
 # Graphics
-debug.composition.type=c2d
 ro.sf.lcd_density=320
 
 # Audio
