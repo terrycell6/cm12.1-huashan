@@ -97,6 +97,9 @@ on boot
     # Install exfat module to support exfat file system
     insmod /system/lib/modules/texfat.ko
 
+    # load custom kernel modules
+    insmod /system/lib/modules/cpufreq_wheatley.ko
+
     exec /system/bin/btnvtool -O
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
@@ -617,6 +620,10 @@ service time_daemon /system/bin/time_daemon
     class late_start
     user root
     group root
+
+# Xperia SP glove mod Sensitivity
+on property:sys.boot_completed=1
+    write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 60
 
 on property:sys.perf.profile=0
     write /sys/devices/system/cpu/cpu0/online 1
