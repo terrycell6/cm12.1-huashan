@@ -98,6 +98,7 @@ on boot
     insmod /system/lib/modules/texfat.ko
 
     # load custom kernel modules
+    insmod /system/lib/modules/cpufreq_lionheart.ko
     insmod /system/lib/modules/cpufreq_wheatley.ko
 
     exec /system/bin/btnvtool -O
@@ -212,10 +213,6 @@ on boot
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
     exec /system/bin/cal_data_manager init
-
-    # glove mod permission fix
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
 
 # msm specific files that need to be created on /data
 on post-fs-data

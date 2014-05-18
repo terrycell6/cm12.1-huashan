@@ -1,15 +1,15 @@
-From af5fdc0c7778d926ad8f1c32ed5968a0e852c66f Mon Sep 17 00:00:00 2001
+From 421bec96e2e07e3e8a69a2362a11ed21adc64cf2 Mon Sep 17 00:00:00 2001
 From: bagyusz <phelyx92@gmail.com>
-Date: Sun, 11 May 2014 09:49:18 +0200
-Subject: [PATCH] cmhw: Glove Mode Switch 2/2
+Date: Sat, 17 May 2014 19:57:33 +0200
+Subject: [PATCH] [PATCH] cmhw: Glove Mode Switch 2/2
 
-Change-Id: I5479e626ca9633297ced1fe81bc7fb1281ebafef
+Change-Id: Ib71db2ea0a3ca4bd3a8f74447ceb0bd32b5030ef
 ---
  res/values/cm_strings.xml                          |  4 ++
- res/xml/more_device_settings.xml                   | 11 ++++
+ res/xml/more_device_settings.xml                   | 11 +++++
  .../android/settings/cyanogenmod/BootReceiver.java |  1 +
- .../settings/cyanogenmod/MoreDeviceSettings.java   | 58 ++++++++++++++++++++++
- 4 files changed, 74 insertions(+)
+ .../settings/cyanogenmod/MoreDeviceSettings.java   | 56 ++++++++++++++++++++++
+ 4 files changed, 72 insertions(+)
 
 diff --git a/res/values/cm_strings.xml b/res/values/cm_strings.xml
 index 158586b..174f325 100644
@@ -59,7 +59,7 @@ index 85d9b5e..62a9715 100644
  
      private void initFreqCapFiles(Context ctx)
 diff --git a/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java b/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
-index 0de3c5b..22b7997 100644
+index 0de3c5b..3582142 100644
 --- a/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
 +++ b/src/com/android/settings/cyanogenmod/MoreDeviceSettings.java
 @@ -18,11 +18,16 @@ package com.android.settings.cyanogenmod;
@@ -99,7 +99,7 @@ index 0de3c5b..22b7997 100644
  
      @Override
      public void onCreate(Bundle savedInstanceState) {
-@@ -63,5 +74,52 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
+@@ -63,5 +74,50 @@ public class MoreDeviceSettings extends SettingsPreferenceFragment {
                  calibrationCategory.removePreference(findPreference(KEY_DISPLAY_GAMMA));
              }
          }
@@ -148,9 +148,7 @@ index 0de3c5b..22b7997 100644
 +            // Hardware abstraction framework not installed
 +            return false;
 +        }
-+    }
-+
--     }
+     }
  }
 -- 
 1.8.1.2
