@@ -2891,24 +2891,6 @@ SectionVerb
 
 EndSection
 }
-SectionUseCase."UL REC" {
-Comment "Voice Uplink Recording use case"
-SectionVerb
-        Name "UL REC"
-
-        EnableSequence
-                'MultiMedia1 Mixer VOC_REC_UL':1:1
-        EndSequence
-
-        DisableSequence
-                'MultiMedia1 Mixer VOC_REC_UL':1:0
-        EndSequence
-
-        # ALSA PCMs
-        PlaybackPCM 0
-        CapturePCM 0
-EndSection
-}
 SectionUseCase."DL REC" {
 Comment "Voice Downlink Recording use case"
 SectionVerb
@@ -5837,22 +5819,6 @@ EndSection
 
 
 SectionDevice
-	Name "BT WB Nrec Tx"
-	Comment "BT SCO WB Tx device if AT*NREC=false"
-
-	EnableSequence
-	EndSequence
-
-	DisableSequence
-	EndSequence
-
-	ACDBID	119:2
-	EffectsMixerCTL "SRS TruMedia"
-
-EndSection
-
-
-SectionDevice
 	Name "BT Legacy Tx"
 	Comment "BT Tx device"
 
@@ -7746,23 +7712,6 @@ SectionModifier
 	# ALSA PCMs
 	PlaybackPCM 3
 	CapturePCM 3
-
-EndSection
-
-SectionModifier
-        Name "Capture Voice Uplink"
-
-        EnableSequence
-                'MultiMedia1 Mixer VOC_REC_UL':1:1
-        EndSequence
-
-        DisableSequence
-                'MultiMedia1 Mixer VOC_REC_UL':1:0
-        EndSequence
-
-        # ALSA PCMs
-        PlaybackPCM 0
-        CapturePCM 0
 
 EndSection
 
