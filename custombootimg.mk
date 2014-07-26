@@ -28,17 +28,17 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 
 	$(hide) $(MKBOOTFS) $(PRODUCT_OUT)/combinedroot/ > $(PRODUCT_OUT)/combinedroot.cpio
 	$(hide) cat $(PRODUCT_OUT)/combinedroot.cpio | gzip > $(PRODUCT_OUT)/combinedroot.fs
-	$(hide) python $(MKELF) -o $@ $(PRODUCT_OUT)/kernel@0x80208000 $(PRODUCT_OUT)/combinedroot.fs@0x81900000,ramdisk vendor/sony/lbhuashan/proprietary/boot/RPM.bin@0x00020000,rpm device/sony/lbhuashan/rootdir/cmdline.txt@cmdline
+	$(hide) python $(MKELF) -o $@ $(PRODUCT_OUT)/kernel@0x80208000 $(PRODUCT_OUT)/combinedroot.fs@0x81900000,ramdisk vendor/lbsony/huashan/proprietary/boot/RPM.bin@0x00020000,rpm device/lbsony/huashan/rootdir/cmdline.txt@cmdline
 
 	$(hide) ln -f $(INSTALLED_BOOTIMAGE_TARGET) $(PRODUCT_OUT)/boot.elf
 
 	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
-	$(hide) cp -r vendor/sony/lbhuashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
+	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
 
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
 	$(recovery_ramdisk) \
 	$(recovery_kernel)
 	@echo ----- Making recovery image ------
-	$(hide) python $(MKELF) -o $@ $(PRODUCT_OUT)/kernel@0x80208000 $(PRODUCT_OUT)/ramdisk-recovery.img@0x81900000,ramdisk vendor/sony/lbhuashan/proprietary/boot/RPM.bin@0x00020000,rpm device/sony/lbhuashan/rootdir/cmdline.txt@cmdline
+	$(hide) python $(MKELF) -o $@ $(PRODUCT_OUT)/kernel@0x80208000 $(PRODUCT_OUT)/ramdisk-recovery.img@0x81900000,ramdisk vendor/lbsony/huashan/proprietary/boot/RPM.bin@0x00020000,rpm device/lbsony/huashan/rootdir/cmdline.txt@cmdline
 	@echo ----- Made recovery image -------- $@

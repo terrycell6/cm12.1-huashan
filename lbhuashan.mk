@@ -162,4 +162,4 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
 # Include non-opensource parts/ proprietary files
-$(call inherit-product, vendor/sony/lbhuashan/huashan-vendor.mk)
+$(call inherit-product, vendor/lbsony/huashan/huashan-vendor.mk)
