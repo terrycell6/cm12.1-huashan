@@ -34,14 +34,14 @@ PRODUCT_PACKAGES := \
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Common Sony Resources
-$(call inherit-product, device/sony/common/resources.mk)
+$(call inherit-product, device/sony/lbcommon/resources.mk)
 
 # Inherit from huashan device makefile
-$(call inherit-product, device/sony/huashan/huashan.mk)
+$(call inherit-product, device/sony/lbhuashan/huashan.mk)
 
 # Set those variables here to overwrite the inherited values.
-PRODUCT_NAME := full_huashan
-PRODUCT_DEVICE := huashan
+PRODUCT_NAME := full_lbhuashan
+PRODUCT_DEVICE := lbhuashan
 PRODUCT_BRAND := Sony
 PRODUCT_MANUFACTURER := Sony
-PRODUCT_MODEL := C5303
+PRODUCT_MODEL := lbC5303
