@@ -22,8 +22,16 @@ This branch is for building CyanogenMod 11 (or Android KitKat 4.4 AOSP based rom
 
 BUILD:
 
+cd /vendor/cm
+
+./get-prebuilts
+
+cd ..
+
+cd ..
+
 . build/envsetup.sh
 
-brunch huashan 
+brunch lbhuashan 
 
 
