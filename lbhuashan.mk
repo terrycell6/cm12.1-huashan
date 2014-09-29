@@ -62,10 +62,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/fstab.qcom:recovery/root/fstab.qcom
 
-# Post recovery script
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/recovery/postrecoveryboot.sh:recovery/root/sbin/postrecoveryboot.sh
-
 # Device specific part for two-stage boot
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/recovery/bootrec-device:recovery/bootrec-device
