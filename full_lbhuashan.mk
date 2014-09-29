@@ -37,7 +37,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/sony/lbcommon/resources.mk)
 
 # Inherit from huashan device makefile
-$(call inherit-product, device/sony/lbhuashan/huashan.mk)
+$(call inherit-product, device/sony/lbhuashan/lbhuashan.mk)
 
 # Set those variables here to overwrite the inherited values.
 PRODUCT_NAME := full_lbhuashan
