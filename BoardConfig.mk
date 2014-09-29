@@ -25,9 +25,6 @@ include device/sony/lbqcom-common/BoardConfigCommon.mk
 TARGET_OTA_ASSERT_DEVICE := lbC5302,lbC5303,lbC5306,lbhuashan
 TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/sony/lbhuashan/releasetools/ota_from_target_files
 
-# On some of the older devices the recovery doesn't support metadata when setting permissions
-SKIP_SET_METADATA := true
-
 TARGET_SPECIFIC_HEADER_PATH += device/sony/lbhuashan/include
 
 # Kernel properties
