@@ -31,10 +31,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) python $(MKELF) -o $@ $(PRODUCT_OUT)/kernel@0x80208000 $(PRODUCT_OUT)/combinedroot.fs@0x81900000,ramdisk vendor/lbsony/huashan/proprietary/boot/RPM.bin@0x00020000,rpm device/sony/lbhuashan/rootdir/cmdline.txt@cmdline
 
 	$(hide) ln -f $(INSTALLED_BOOTIMAGE_TARGET) $(PRODUCT_OUT)/boot.elf
-
-	$(hide) rm -fr $(INSTALLED_BOOTIMAGE_TARGET)
-	$(hide) rm -fr $(PRODUCT_OUT)/boot.elf
-	$(hide) cp -r device/sony/lbhuashan/boot.img $(PRODUCT_OUT)
+	$(hide) cp -r vendor/lbsony/huashan/proprietary/kernel/boot.img $(PRODUCT_OUT)
 
 	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib

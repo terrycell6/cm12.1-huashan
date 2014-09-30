@@ -22,13 +22,11 @@ This branch is for building CyanogenMod 11 (or Android KitKat 4.4 AOSP based rom
 
 BUILD:
 
-cd /vendor/cm
+cd vendor/cm
 
 ./get-prebuilts
 
-cd ..
-
-cd ..
+croot
 
 . build/envsetup.sh
 
