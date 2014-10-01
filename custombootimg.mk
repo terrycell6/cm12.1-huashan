@@ -35,6 +35,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 
 	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
+	$(hide) cp $(PRODUCT_OUT)/ramdisk.cpio $(PRODUCT_OUT)/system/lib
 
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
