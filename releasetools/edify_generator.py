@@ -150,6 +150,9 @@ class EdifyGenerator(object):
 
   def LBLperm(self, customstrings):
     self.script.append('set_metadata("/system/bin/hijack.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata("/system/bin/philz.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata("/system/bin/cwm.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
+    self.script.append('set_metadata("/system/bin/ramdisk.cpio", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/bin/wipedata", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
 
   def ShowProgress(self, frac, dur):
