@@ -20,13 +20,25 @@ Camera  | 8MPx, LED Flash
 
 This branch is for building CyanogenMod 11 (or Android KitKat 4.4 AOSP based roms) ROMS.
 
-BUILD:
+
+
+How to build:
+
+Initialize repo:
+
+
+repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0
+
+repo sync
 
 cd vendor/cm
 
 ./get-prebuilts
 
 croot
+
+
+Compile:
 
 . build/envsetup.sh
 
