@@ -28,7 +28,7 @@ TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/sony/lbhuashan/releasetools/
 TARGET_SPECIFIC_HEADER_PATH += device/sony/lbhuashan/include
 
 # Kernel properties
-TARGET_KERNEL_SOURCE := kernel/sony/msm8960t
+TARGET_KERNEL_SOURCE := kernel/sony/lbmsm8960t
 TARGET_KERNEL_CONFIG := viskan_huashan_defconfig
 
 # Platform
