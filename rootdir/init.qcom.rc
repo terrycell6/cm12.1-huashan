@@ -98,7 +98,6 @@ on boot
     insmod /system/lib/modules/texfat.ko
 
     # load custom kernel modules
-    insmod /system/lib/modules/cpufreq_lionheart.ko
     insmod /system/lib/modules/cpufreq_wheatley.ko
 
     exec /system/bin/btnvtool -O
