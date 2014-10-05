@@ -26,6 +26,8 @@ How to build Slimkat 4.4.4:
 
 Compile:
 
+. build/envsetup.sh
+
 make clean
 
 lunch
