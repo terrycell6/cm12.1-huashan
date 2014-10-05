@@ -22,26 +22,12 @@ This branch is for building CyanogenMod 11 (or Android KitKat 4.4 AOSP based rom
 
 
 
-How to build:
-
-Initialize repo:
-
-
-repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0
-
-repo sync
-
-cd vendor/cm
-
-./get-prebuilts
-
-croot
-
+How to build Slimkat 4.4.4:
 
 Compile:
 
-. build/envsetup.sh
+make clean
 
-brunch lbhuashan 
+lunch
 
-
+make -j8 otapackage 

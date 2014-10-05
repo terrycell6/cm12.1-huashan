@@ -1,0 +1,26 @@
+[
+    {
+        "repository": "SlimRoms/hardware_qcom_audio-caf",
+        "target_path": "hardware/qcom/audio-caf",
+        "remote": "github",
+        "branch": "kk4.4"
+    },
+    {
+        "repository": "SlimRoms/hardware_qcom_display-caf",
+        "target_path": "hardware/qcom/display-caf",
+        "remote": "github",
+        "branch": "kk4.4"
+    },
+    {
+        "repository": "SlimRoms/hardware_qcom_media-caf",
+        "target_path": "hardware/qcom/media-caf",
+        "remote": "github",
+        "branch": "kk4.4"
+    },
+    {
+        "repository": "CyanogenMod/android_hardware_sony_DASH",
+        "target_path": "hardware/sony/DASH",
+        "remote": "github",
+        "branch": "cm-11.0"
+    }
+]
