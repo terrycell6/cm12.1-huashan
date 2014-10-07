@@ -1,0 +1,30 @@
+From 14c11e72bdcd5d30ec9f89e332ff19af71e4b376 Mon Sep 17 00:00:00 2001
+From: bagyusz <phelyx92@gmail.com>
+Date: Tue, 7 Oct 2014 14:59:28 +0200
+Subject: [PATCH] App2SD-Calculate-application-sizes-correctly
+
+Change-Id: I7644282da6848d4519f8522beb546c8778c7c75b
+---
+ cmds/installd/commands.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/cmds/installd/commands.c b/cmds/installd/commands.c
+index 805872a..08d8a99 100644
+--- a/cmds/installd/commands.c
++++ b/cmds/installd/commands.c
+@@ -462,7 +462,11 @@ int get_size(const char *pkgname, userid_t userid, const char *apkpath,
+     }
+ 
+         /* add in size of any libraries */
+-    if (libdirpath != NULL && libdirpath[0] != '!') {
++        /* If the app is on the SD card, the libraries are stored in asecpath.
++         * If we don't check that asecpath is defined, the libraries will be
++         * counted twice. Once in asecsize and once in codesize. */
++    if ((asecpath == NULL || asecpath[0] == '!') &&
++            libdirpath != NULL && libdirpath[0] != '!') {
+         d = opendir(libdirpath);
+         if (d != NULL) {
+             dfd = dirfd(d);
+-- 
+1.9.2
+
