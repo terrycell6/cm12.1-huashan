@@ -16,8 +16,8 @@ index 95ec219..d524a34 100644
    <string name="wifi_ap_clients_title">Csatlakoztatott eszközök</string>
    <string name="wifi_ap_client_ap_disabled">Hotspot letiltva</string>
    <string name="wifi_ap_client_none_connected">Nincs csatlakoztatott eszköz</string>
-+  <string name="app_moving_enable">App2SD Bekapcsolva</string>
-+  <string name="app_moving_disable">App2SD Kikapcsolva</string>
++  <string name="app_moving_enable">App2SD Bekapcsolás</string>
++  <string name="app_moving_disable">App2SD Kikapcsolás</string>
 +  <string name="app_moving_reboot_title">Újraindítás most?</string>
 +  <string name="app_moving_reboot_enabled_desc">Sikeresen bekapcsolva a Külső SD kártyára való applikáció telepítés.\n\nA készüléket újra kell indítani, hogy a beállítás érvényesüljön.</string>
 +  <string name="app_moving_reboot_disabled_desc">Sikeresen kikapcsolva a Külső SD kártyára való applikáció telepítés.\n\nA készüléket újra kell indítani, hogy a beállítás érvényesüljön.</string>
