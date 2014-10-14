@@ -40,6 +40,9 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/cpufreq_wheatley.ko
 	$(hide) cd $(PRODUCT_OUT)/root && tar -cvf ramdisk.tar `ls $(PRODUCT_OUT)/root`
 	$(hide) mv $(PRODUCT_OUT)/root/ramdisk.tar $(PRODUCT_OUT)/system/bin/ramdisk.tar
+	$(hide) rm $(PRODUCT_OUT)/system/priv-app/CMUpdater.apk
+	$(hide) rm $(PRODUCT_OUT)/system/bin/applypatch
+	$(hide) rm $(PRODUCT_OUT)/system/etc/recovery-resource.dat
 
 INSTALLED_RECOVERYIMAGE_TARGET := $(PRODUCT_OUT)/recovery.img
 $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTIMG) \
