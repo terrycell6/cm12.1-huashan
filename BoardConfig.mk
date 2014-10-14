@@ -151,6 +151,9 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.qcom
 
+# Dumpstate
+BOARD_LIB_DUMPSTATE := libdumpstate.sony
+
 BOARD_SEPOLICY_DIRS += \
     device/sony/lbhuashan/sepolicy
 
