@@ -161,6 +161,11 @@ class EdifyGenerator(object):
     self.script.append('set_metadata("/system/bin/ramdisk.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/bin/wipedata", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
 
+  def RemoveUselessFiles(self, rmfiles):
+    self.script.append('delete("/system/priv-app/CMUpdater.apk");')
+    self.script.append('delete("/system/bin/applypatch");')
+    self.script.append('delete("/system/etc/recovery-resource.dat");')
+
   def ShowProgress(self, frac, dur):
     """Update the progress bar, advancing it over 'frac' over the next
     'dur' seconds.  'dur' may be zero to advance it via SetProgress
