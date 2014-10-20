@@ -6,5 +6,4 @@
     <project path="hardware/qcom/display-caf" name="SlimRoms/hardware_qcom_display-caf" remote="github" revision="kk4.4" />
     <project path="hardware/qcom/media-caf" name="SlimRoms/hardware_qcom_media-caf" remote="github" revision="kk4.4" />
     <project path="hardware/sony/DASH" name="CyanogenMod/android_hardware_sony_DASH" remote="github" revision="cm-11.0" />
-    <project path="hardware/qcom/fm" name="CyanogenMod/android_hardware_qcom_fm" remote="github" revision="cm-11.0" />
 </manifest>
