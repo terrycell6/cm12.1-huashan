@@ -5209,17 +5209,22 @@ SectionDevice
 	Name "FM Speaker"
 
 	EnableSequence
-		'Internal FM RX Volume':1:0
-		'SLIMBUS_0_RX Port Mixer INTERNAL_FM_TX':1:1
-		'SLIMBUS_DL_HL Switch':1:1
+		'SLIM_0_RX Channels':0:Two
+		'RX3 MIX1 INP1':0:RX1
+		'RX3 MIX1 INP2':0:RX2
+		'LINEOUT1 DAC Switch':1:1
+                'LINEOUT1 Volume':1:100
+		'RX3 Digital Volume':1:71
 	EndSequence
 
 	DisableSequence
-		'SLIMBUS_0_RX Port Mixer INTERNAL_FM_TX':1:0
-		'SLIMBUS_DL_HL Switch':1:0
+		'RX3 MIX1 INP1':0:ZERO
+		'RX3 MIX1 INP2':0:ZERO
+		'LINEOUT1 DAC Switch':1:0
+                'LINEOUT1 Volume':1:0
 	EndSequence
 
-	ACDBID	272:1
+	ACDBID	263:1
 EndSection
 
 SectionDevice
