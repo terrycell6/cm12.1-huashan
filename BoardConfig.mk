@@ -31,9 +31,6 @@ TARGET_SPECIFIC_HEADER_PATH += device/sony/lbhuashan/include
 TARGET_KERNEL_SOURCE := kernel/sony/lbmsm8960t
 TARGET_KERNEL_CONFIG := viskan_huashan_defconfig
 
-# External apps on SD
-TARGET_EXTERNAL_APPS = sdcard1
-
 # Platform
 TARGET_BOOTLOADER_BOARD_NAME := MSM8960
 TARGET_BOARD_PLATFORM := msm8960
@@ -111,7 +108,6 @@ BOARD_CUSTOM_BOOTIMG_MK := device/sony/lbhuashan/custombootimg.mk
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
 TARGET_RECOVERY_FSTAB := device/sony/lbhuashan/rootdir/fstab.qcom
-#RECOVERY_FSTAB_VERSION := 2
 
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
