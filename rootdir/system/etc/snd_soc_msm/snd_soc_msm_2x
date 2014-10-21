@@ -5218,7 +5218,7 @@ SectionDevice
 		'RX3 MIX1 INP2':0:RX2
 		'LINEOUT1 DAC Switch':1:1
                 'LINEOUT1 Volume':1:100
-		'RX3 Digital Volume':1:73
+		'RX3 Digital Volume':1:71
 	EndSequence
 
 	DisableSequence
