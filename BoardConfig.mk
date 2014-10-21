@@ -137,6 +137,9 @@ QCOM_FM_ENABLED := true
 # QCOM enhanced A/V
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
+# Legacy RIL
+BOARD_HAS_RIL_LEGACY_PAP := true
+
 # Partition information
 BOARD_VOLD_MAX_PARTITIONS := 26
 
