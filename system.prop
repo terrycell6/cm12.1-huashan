@@ -30,8 +30,7 @@ lpa.decode=true
 lpa.use-stagefright=true
 
 # FM radio
-ro.fm.analogpath.supported=false
-ro.fm.transmitter=false
+ro.fm.transmitter=true
 
 # System prop to select audio resampler quality
 af.resampler.quality=255

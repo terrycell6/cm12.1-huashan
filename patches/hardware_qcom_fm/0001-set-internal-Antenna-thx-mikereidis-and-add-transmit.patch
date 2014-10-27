@@ -1,0 +1,64 @@
+From 6228fea1ca6c71b8355843dfc6a55c8797f29a7e Mon Sep 17 00:00:00 2001
+From: bagyusz <phelyx92@gmail.com>
+Date: Mon, 27 Oct 2014 18:56:20 +0100
+Subject: [PATCH] set internal Antenna thx mikereidis || and add transmitter
+ hack
+
+Change-Id: I1456d64bc27dde254d2dc8ea77880389cba73ca1
+---
+ fmapp2/src/com/caf/fmradio/FMRadioService.java        | 2 +-
+ fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java | 4 ++--
+ fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/fmapp2/src/com/caf/fmradio/FMRadioService.java b/fmapp2/src/com/caf/fmradio/FMRadioService.java
+index 2a262e9..009ea67 100644
+--- a/fmapp2/src/com/caf/fmradio/FMRadioService.java
++++ b/fmapp2/src/com/caf/fmradio/FMRadioService.java
+@@ -1632,7 +1632,7 @@ public class FMRadioService extends Service
+             Log.d(LOGTAG, "enableAutoAF done, Status :" +  bStatus);
+ 
+             /* There is no internal Antenna*/
+-            bStatus = mReceiver.setInternalAntenna(false);
++            bStatus = mReceiver.setInternalAntenna(true);
+             Log.d(LOGTAG, "setInternalAntenna done, Status :" +  bStatus);
+ 
+             /* Read back to verify the internal Antenna mode*/
+diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
+index 9798e3e..ba7e84c 100644
+--- a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
++++ b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
+@@ -829,7 +829,7 @@ public class FMTransmitterActivity extends Activity {
+    private void setHsPluggedInMsg() {
+       if(mRadioTextTV != null) {
+          mRadioTextTV.setVisibility(View.VISIBLE);
+-         mRadioTextTV.setText(getString(R.string.msg_headsetpluggedin));
++         mRadioTextTV.setText(getString(R.string.msg_noantenna));
+       }
+    }
+ 
+@@ -955,7 +955,7 @@ public class FMTransmitterActivity extends Activity {
+                  Log.d(LOGTAG,"headset plugged in");
+                  if(mRadioTextTV != null) {
+                     mRadioTextTV.setVisibility(View.VISIBLE);
+-                     mRadioTextTV.setText(getString(R.string.msg_headsetpluggedin));
++                     mRadioTextTV.setText(getString(R.string.msg_noantenna));
+                  }
+                  if(mOnOffButton != null) {
+                     mOnOffButton.setEnabled(false);
+diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
+index 21f79e1..d89a4eb 100644
+--- a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
++++ b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
+@@ -1052,7 +1052,7 @@ public class FMTransmitterService extends Service
+                       Log.d(LOGTAG, "==> intent: " + intent);
+                       Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 0));
+                       Log.d(LOGTAG, "    name: " + intent.getStringExtra("name"));
+-                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
++                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 0);
+                       mHandler.post(mChangeFMTxState);
+ 
+                    } else if (mA2dpDeviceState.isA2dpStateChange(action)) {
+-- 
+1.9.2
+
