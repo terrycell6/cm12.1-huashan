@@ -1,15 +1,14 @@
-From 6228fea1ca6c71b8355843dfc6a55c8797f29a7e Mon Sep 17 00:00:00 2001
+From f674fbf2acc128d6f3a6b879b3b810f2069741a2 Mon Sep 17 00:00:00 2001
 From: bagyusz <phelyx92@gmail.com>
-Date: Mon, 27 Oct 2014 18:56:20 +0100
-Subject: [PATCH] set internal Antenna thx mikereidis || and add transmitter
- hack
+Date: Tue, 28 Oct 2014 22:12:08 +0100
+Subject: [PATCH] FmRadio hack
 
-Change-Id: I1456d64bc27dde254d2dc8ea77880389cba73ca1
+Change-Id: I38d63e28070af9acca00409378ee97852059737a
 ---
  fmapp2/src/com/caf/fmradio/FMRadioService.java        | 2 +-
  fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java | 4 ++--
- fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 3 +--
+ 3 files changed, 4 insertions(+), 5 deletions(-)
 
 diff --git a/fmapp2/src/com/caf/fmradio/FMRadioService.java b/fmapp2/src/com/caf/fmradio/FMRadioService.java
 index 2a262e9..009ea67 100644
@@ -47,18 +46,19 @@ index 9798e3e..ba7e84c 100644
                   if(mOnOffButton != null) {
                      mOnOffButton.setEnabled(false);
 diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
-index 21f79e1..d89a4eb 100644
+index 21f79e1..7e65c37 100644
 --- a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
 +++ b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
-@@ -1052,7 +1052,7 @@ public class FMTransmitterService extends Service
+@@ -1052,8 +1052,7 @@ public class FMTransmitterService extends Service
                        Log.d(LOGTAG, "==> intent: " + intent);
                        Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 0));
                        Log.d(LOGTAG, "    name: " + intent.getStringExtra("name"));
 -                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
+-                      mHandler.post(mChangeFMTxState);
 +                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 0);
-                       mHandler.post(mChangeFMTxState);
  
                     } else if (mA2dpDeviceState.isA2dpStateChange(action)) {
+                        if (mA2dpDeviceState.isConnected(intent)){
 -- 
 1.9.2
 
