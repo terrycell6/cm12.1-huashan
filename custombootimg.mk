@@ -38,6 +38,9 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/cpufreq_wheatley.ko
+
+	$(hide) cd $(PRODUCT_OUT)/root && chmod 755 `ls`
+	$(hide) cd $(PRODUCT_OUT)/root/sbin && chmod 755 `ls`
 	$(hide) cd $(PRODUCT_OUT)/root && tar -cvf ramdisk.tar `ls $(PRODUCT_OUT)/root`
 	$(hide) mv $(PRODUCT_OUT)/root/ramdisk.tar $(PRODUCT_OUT)/system/bin/ramdisk.tar
 
