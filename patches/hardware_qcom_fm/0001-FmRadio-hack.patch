@@ -1,14 +1,14 @@
-From f674fbf2acc128d6f3a6b879b3b810f2069741a2 Mon Sep 17 00:00:00 2001
+From 688c79c9acd7972da8b1028f17e9cec5e422e275 Mon Sep 17 00:00:00 2001
 From: bagyusz <phelyx92@gmail.com>
-Date: Tue, 28 Oct 2014 22:12:08 +0100
+Date: Wed, 29 Oct 2014 21:30:26 +0100
 Subject: [PATCH] FmRadio hack
 
-Change-Id: I38d63e28070af9acca00409378ee97852059737a
+Change-Id: I63923f7e5f6cccd641019a5738d0e505226aa2e3
 ---
  fmapp2/src/com/caf/fmradio/FMRadioService.java        | 2 +-
- fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java | 4 ++--
- fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 3 +--
- 3 files changed, 4 insertions(+), 5 deletions(-)
+ fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java | 8 ++++----
+ fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 5 ++---
+ 3 files changed, 7 insertions(+), 8 deletions(-)
 
 diff --git a/fmapp2/src/com/caf/fmradio/FMRadioService.java b/fmapp2/src/com/caf/fmradio/FMRadioService.java
 index 2a262e9..009ea67 100644
@@ -24,7 +24,7 @@ index 2a262e9..009ea67 100644
  
              /* Read back to verify the internal Antenna mode*/
 diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
-index 9798e3e..ba7e84c 100644
+index 9798e3e..39ae4b6 100644
 --- a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
 +++ b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
 @@ -829,7 +829,7 @@ public class FMTransmitterActivity extends Activity {
@@ -45,17 +45,31 @@ index 9798e3e..ba7e84c 100644
                   }
                   if(mOnOffButton != null) {
                      mOnOffButton.setEnabled(false);
+@@ -1457,8 +1457,8 @@ public class FMTransmitterActivity extends Activity {
+         if(mService != null) {
+            try {
+                 mService.registerCallbacks(mServiceCallbacks);
+-                if(false == mService.isHeadsetPlugged()) {
+-                   Log.e(LOGTAG, "return for isHeadsetPlugged is false");
++                if(true == mService.isHeadsetPlugged()) {
++                   Log.e(LOGTAG, "return for isHeadsetPlugged is true");
+                    if(SavedDataAndState == null) {
+                       enableRadioHandler.removeCallbacks(enableRadioTask);
+                       disableRadioHandler.removeCallbacks(disableRadioTask);
 diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
-index 21f79e1..7e65c37 100644
+index 21f79e1..a7217e5 100644
 --- a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
 +++ b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
-@@ -1052,8 +1052,7 @@ public class FMTransmitterService extends Service
+@@ -1050,10 +1050,9 @@ public class FMTransmitterService extends Service
+                       // Listen for ACTION_HEADSET_PLUG broadcasts.
+                       Log.d(LOGTAG, "mTransmitter: ACTION_HEADSET_PLUG");
                        Log.d(LOGTAG, "==> intent: " + intent);
-                       Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 0));
+-                      Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 0));
++                      Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 1));
                        Log.d(LOGTAG, "    name: " + intent.getStringExtra("name"));
 -                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
 -                      mHandler.post(mChangeFMTxState);
-+                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 0);
++                      mHeadsetPlugged = (intent.getIntExtra("state", 1) == 0);
  
                     } else if (mA2dpDeviceState.isA2dpStateChange(action)) {
                         if (mA2dpDeviceState.isConnected(intent)){
