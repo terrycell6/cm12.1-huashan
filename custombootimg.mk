@@ -34,6 +34,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/kernel/boot.img $(PRODUCT_OUT)
 
 	$(hide) cp $(PRODUCT_OUT)/system/lib/modules/cpufreq_wheatley.ko vendor/lbsony/huashan/proprietary/lib/modules/
+	$(hide) cp $(PRODUCT_OUT)/system/lib/modules/cpufreq_conservative.ko vendor/lbsony/huashan/proprietary/lib/modules/
 
 	$(hide) cp $(PRODUCT_OUT)/system/lib/modules/zsmalloc.ko vendor/lbsony/huashan/proprietary/lib/modules/
 	$(hide) cp $(PRODUCT_OUT)/system/lib/modules/lzo.ko vendor/lbsony/huashan/proprietary/lib/modules/
@@ -42,6 +43,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/cpufreq_wheatley.ko
+	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/cpufreq_conservative.ko
 
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/zsmalloc.ko
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/lzo.ko
