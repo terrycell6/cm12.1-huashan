@@ -18,6 +18,7 @@ package org.cyanogenmod.hardware;
 
 import java.io.File;
 import org.cyanogenmod.hardware.util.FileUtils;
+import android.os.SystemProperties;
 
 /**
  * Glove mode / high touch sensitivity
@@ -33,6 +34,7 @@ public class HighTouchSensitivity {
      */
     public static boolean isSupported() {
         File f = new File(GLOVE_PATH);
+        SystemProperties.set("hw.glove.mod.perm.w.on","1");
         return f.exists();
     }
 
@@ -57,7 +59,9 @@ public class HighTouchSensitivity {
      * failed; true in any other case.
      */
     public static boolean setEnabled(boolean status) {
+        SystemProperties.set("hw.glove.mod.perm.w.on","0");
         return FileUtils.writeLine(GLOVE_PATH, String.valueOf(status ? 0 : 1));
+
     }
 
 }
