@@ -155,6 +155,7 @@ class EdifyGenerator(object):
     self.script.append('symlink("/data/etc/wlan_macaddr3", "/system/etc/firmware/wlan/macaddr3");')
 
   def LBLperm(self, customstrings):
+    self.script.append('set_metadata("/system/bin/glove_mode_set.sh", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/bin/hijack.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/bin/philz.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
     self.script.append('set_metadata("/system/bin/cwm.tar", "uid", 0, "gid", 0, "mode", 0777, "capabilities", 0x0, "selabel", "u:object_r:system_file:s0");')
