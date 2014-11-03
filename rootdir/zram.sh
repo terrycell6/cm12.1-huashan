@@ -4,5 +4,5 @@ insmod /system/lib/modules/zsmalloc.ko
 sync
 insmod /system/lib/modules/lzo.ko
 sync
-insmod /system/lib/modules/zram.ko num_devices=1
+insmod /system/lib/modules/zram.ko num_devices=2
 sync
