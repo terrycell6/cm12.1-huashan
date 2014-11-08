@@ -20,6 +20,8 @@ import init.sony.usb.rc
 on early-init
     mount debugfs debugfs /sys/kernel/debug
     symlink /data/tombstones /tombstones
+    write /sys/block/mmcblk0/queue/read_ahead_kb 512
+    write /sys/block/mmcblk1/queue/read_ahead_kb 512
 
 on init
 
@@ -87,6 +89,12 @@ on early-boot
     write /sys/module/pm8921_charger/parameters/enable_lowbatt_detect 1
 
 on boot
+
+    # fast boot up
+    write /sys/devices/system/cpu/cpu0/online 1
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "performance"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "performance"
 
     # Install exfat module to support exfat file system
     insmod /system/lib/modules/texfat.ko
