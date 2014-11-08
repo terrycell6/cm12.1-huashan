@@ -473,6 +473,14 @@ service gsiff_daemon /system/bin/gsiff_daemon
     user system
     group gps qcom_oncrpc net_raw
 
+on property:crypto.driver.load=1
+     insmod /system/lib/modules/qce.ko
+     insmod /system/lib/modules/qcedev.ko
+
+on property:crypto.driver.load=0
+     exec /system/bin/rmmod qcedev.ko
+     exec /system/bin/rmmod qce.ko
+
 service qrngd /system/bin/qrngd -f
     class main
     user root
@@ -633,6 +641,7 @@ on property:hw.glove.mod.perm.w.on=0
     exec hw.glove.mod.perm.w.on.sh
 
 on property:sys.perf.profile=0
+    start mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "wheatley"
@@ -641,6 +650,7 @@ on property:sys.perf.profile=0
     write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone "ondemand"
 
 on property:sys.perf.profile=1
+    start mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
@@ -649,6 +659,7 @@ on property:sys.perf.profile=1
     write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone "ondemand"
 
 on property:sys.perf.profile=2
+    stop mpdecision
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu1/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "performance"
