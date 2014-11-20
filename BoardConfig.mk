@@ -54,6 +54,9 @@ TARGET_KRAIT_BIONIC_PLDTHRESH := 10
 TARGET_KRAIT_BIONIC_BBTHRESH  := 64
 TARGET_KRAIT_BIONIC_PLDSIZE   := 64
 
+# Bionic
+TARGET_USE_QCOM_BIONIC_OPTIMIZATION := true
+
 # Kernel information
 BOARD_KERNEL_BASE     := 0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
@@ -79,6 +82,9 @@ BOARD_HARDWARE_CLASS += device/sony/lbhuashan/cmhw
 
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
+
+# MMap compatibility
+BOARD_USES_LEGACY_MMAP := true
 
 # GPS
 BOARD_VENDOR_QCOM_GPS_LOC_API_HARDWARE := $(TARGET_BOARD_PLATFORM)
@@ -115,9 +121,9 @@ TARGET_USERIMAGES_USE_EXT4 := true
 
 # QCOM/CAF hardware
 BOARD_USES_QCOM_HARDWARE := true
-TARGET_QCOM_AUDIO_VARIANT := caf
-TARGET_QCOM_DISPLAY_VARIANT := caf
-TARGET_QCOM_MEDIA_VARIANT := caf
+#TARGET_QCOM_AUDIO_VARIANT := caf
+#TARGET_QCOM_DISPLAY_VARIANT := caf
+#TARGET_QCOM_MEDIA_VARIANT := caf
 TARGET_USES_QCOM_BSP := true
 
 # Audio
@@ -129,8 +135,11 @@ BOARD_HAVE_CSD_FAST_CALL_SWITCH :=true
 BOARD_USES_FLUENCE_INCALL := true
 BOARD_USES_SEPERATED_AUDIO_INPUT := true
 BOARD_USES_SEPERATED_VOICE_SPEAKER_MIC := true
+QCOM_ANC_HEADSET_ENABLED := false
+QCOM_FLUENCE_ENABLED := false
 
 #Fm Radio
+AUDIO_FEATURE_ENABLED_FM := true
 QCOM_FM_ENABLED := true
 
 # QCOM enhanced A/V
@@ -147,41 +156,49 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01400000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1056964608
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
 
+# Symbol compatibility
+TARGET_USES_ICU_COMPAT_SYMBOLS := true
+
+# Enable Minikin text layout engine
+USE_MINIKIN := true
+
+# Include an expanded selection of fonts
+EXTENDED_FONT_FOOTPRINT := true
+
 # Override healthd HAL
 BOARD_HAL_STATIC_LIBRARIES := libhealthd.qcom
 
 # Dumpstate
 BOARD_LIB_DUMPSTATE := libdumpstate.sony
 
+TARGET_USES_LOGD := false
+
 BOARD_SEPOLICY_DIRS += \
     device/sony/lbhuashan/sepolicy
 
 BOARD_SEPOLICY_UNION += \
-    file_contexts \
-    property_contexts \
-    te_macros \
-    bluetooth_loader.te \
-    bridge.te \
-    camera.te \
-    device.te \
-    dhcp.te \
-    domain.te \
-    drmserver.te \
-    file.te \
-    kickstart.te \
-    init.te \
-    mac_update.te \
-    mediaserver.te \
-    mpdecision.te \
-    netmgrd.te \
-    qmux.te \
-    rild.te \
-    rmt.te \
-    surfaceflinger.te \
-    system.te \
-    tee.te \
-    thermald.te \
-    ueventd.te \
-    vold.te \
-    wpa_supplicant.te
-
+	app.te \
+	bluetooth.te \
+	bridge.te \
+	device.te \
+	domain.te \
+	file.te \
+	irsc_util.te \
+	mediaserver.te \
+	mpdecision.te \
+	netmgrd.te \
+	platform_app.te \
+	qmux.te \
+	radio.te \
+	rild.te \
+	rmt.te \
+	sensors.te \
+	surfaceflinger.te \
+	system_server.te \
+	tee.te \
+	time.te \
+	ueventd.te \
+	wpa.te \
+	file_contexts \
+	genfs_contexts \
+	te_macros

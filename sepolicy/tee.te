@@ -1,2 +1,1 @@
-# Qualcomm Secure Execution Environment Communicator policy
-allow tee self:process execmem;
+allow tee self:capability { setuid setgid };

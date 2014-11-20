@@ -1,0 +1,78 @@
+From dc0496dbfd776f50b4e1cd59c0d13a7cce400f48 Mon Sep 17 00:00:00 2001
+From: maxwen <max.weninger@gmail.com>
+Date: Fri, 30 Aug 2013 02:09:53 +0200
+Subject: [PATCH] added backward compatibility symbols for libqc-opt.so
+
+Change-Id: I196e913e642c25478933c9a873cd3198702ec0ae
+
+Conflicts:
+	common/utext.cpp
+
+Change-Id: Ib5f3738db4625c3ce403e90f31c25d1c3f500d72
+---
+ icu4c/source/common/uchar.c   |  5 +++++
+ icu4c/source/common/utext.cpp | 10 +++++++++-
+ icu4c/source/common/utypes.c  |  6 ++++++
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/icu4c/source/common/uchar.c b/icu4c/source/common/uchar.c
+index 9a285cc..a5697a6 100644
+--- a/icu4c/source/common/uchar.c
++++ b/icu4c/source/common/uchar.c
+@@ -489,6 +489,11 @@ u_digit(UChar32 ch, int8_t radix) {
+     return (int8_t)((value<radix) ? value : -1);
+ }
+ 
++U_CAPI int32_t U_EXPORT2
++u_digit_48(UChar32 ch, int8_t radix) {
++	return u_digit(ch, radix);
++}
++
+ U_CAPI UChar32 U_EXPORT2
+ u_forDigit(int32_t digit, int8_t radix) {
+     if((uint8_t)(radix-2)>(36-2) || (uint32_t)digit>=(uint32_t)radix) {
+diff --git a/icu4c/source/common/utext.cpp b/icu4c/source/common/utext.cpp
+index f16591f..e0cd4ec 100644
+--- a/icu4c/source/common/utext.cpp
++++ b/icu4c/source/common/utext.cpp
+@@ -691,7 +691,10 @@ utext_close(UText *ut) {
+     return ut;
+ }
+ 
+-
++U_CAPI UText * U_EXPORT2
++utext_close_48(UText *ut) {
++    return utext_close(ut);
++}
+ 
+ 
+ //
+@@ -2606,6 +2609,11 @@ utext_openUChars(UText *ut, const UChar *s, int64_t length, UErrorCode *status)
+     return ut;
+ }
+ 
++U_CAPI UText * U_EXPORT2
++utext_openUChars_48(UText *ut, const UChar *s, int64_t length, UErrorCode *status) {
++    return utext_openUChars(ut, s, length, status);
++}
++
+ 
+ //------------------------------------------------------------------------------
+ //
+diff --git a/icu4c/source/common/utypes.c b/icu4c/source/common/utypes.c
+index c28e727..230838e 100644
+--- a/icu4c/source/common/utypes.c
++++ b/icu4c/source/common/utypes.c
+@@ -210,6 +210,12 @@ u_errorName(UErrorCode code) {
+     }
+ }
+ 
++U_CAPI const char * U_EXPORT2
++u_errorName_48(UErrorCode code) {
++	return u_errorName(code);
++}
++
++
+ /*
+  * Hey, Emacs, please set the following:
+  *

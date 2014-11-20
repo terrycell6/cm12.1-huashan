@@ -642,6 +642,15 @@ on property:hw.glove.mod.perm.w.on=1
 on property:hw.glove.mod.perm.w.on=0
     exec hw.glove.mod.perm.w.on.sh
 
+on property:sys.boot_completed=1
+    start mpdecision
+    write /sys/devices/system/cpu/cpu0/online 1
+    write /sys/devices/system/cpu/cpu1/online 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
+    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "interactive"
+    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy "trustzone"
+    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone "ondemand"
+
 on property:sys.perf.profile=0
     start mpdecision
     write /sys/devices/system/cpu/cpu0/online 1

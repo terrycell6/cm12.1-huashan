@@ -1,16 +1,17 @@
-type diagnostic_device, dev_type;
-type kgsl_device, dev_type, mlstrustedobject;
-type mpdecision_device, dev_type;
+type wlan_device, dev_type;
+
+type diag_device, dev_type;
+
+type smd_device, dev_type;
+
+# Shared memory logger
 type shared_log_device, dev_type;
+
 type power_control_device, dev_type;
-type efs_block_device, dev_type;
-type rmt_block_device, dev_type;
-type bluetooth_device, dev_type;
-type shared_memory_device, dev_type;
+
+# Real Time Clock
+type rtc, dev_type;
+
+type modem_block_device, dev_type;
+
 type rfkill_device, dev_type;
-
-# Qualcomm MSM Audio ACDB device
-type msm_acdb_device, dev_type;
-
-# Kickstart device used by QC qcks
-type kickstart_device, dev_type;
