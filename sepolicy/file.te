@@ -1,5 +1,3 @@
-type qmuxd_socket, file_type;
-type sensors_socket, file_type;
 type tad_socket, file_type;
 type illumination_socket, file_type;
 
