@@ -177,28 +177,28 @@ BOARD_SEPOLICY_DIRS += \
     device/sony/lbhuashan/sepolicy
 
 BOARD_SEPOLICY_UNION += \
-	app.te \
-	bluetooth.te \
-	bridge.te \
-	device.te \
-	domain.te \
-	file.te \
-	irsc_util.te \
-	mediaserver.te \
-	mpdecision.te \
-	netmgrd.te \
-	platform_app.te \
-	qmux.te \
-	radio.te \
-	rild.te \
-	rmt.te \
-	sensors.te \
-	surfaceflinger.te \
-	system_server.te \
-	tee.te \
-	time.te \
-	ueventd.te \
-	wpa.te \
-	file_contexts \
-	genfs_contexts \
-	te_macros
+    file_contexts \
+    property_contexts \
+    te_macros \
+    bluetooth_loader.te \
+    bridge.te \
+    camera.te \
+    device.te \
+    dhcp.te \
+    domain.te \
+    drmserver.te \
+    file.te \
+    kickstart.te \
+    init.te \
+    mac_update.te \
+    mediaserver.te \
+    mpdecision.te \
+    netmgrd.te \
+    qmux.te \
+    rild.te \
+    surfaceflinger.te \
+    system_server.te \
+    tee.te \
+    thermald.te \
+    ueventd.te \
+    wpa_supplicant.te
