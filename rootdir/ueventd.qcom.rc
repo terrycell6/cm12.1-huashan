@@ -27,12 +27,12 @@
 #
 
 #permissions for sensors
-/sys/devices/virtual/input/input*   bma250_rate        0640  system   system
+/sys/devices/virtual/input/input*   bma250_rate        0660  system   system
 
 # Permissions for AKM8963 sensor
-/sys/devices/virtual/input/input*   interval    0640  system   system
-/sys/devices/virtual/input/input*   single      0640  system   system
-/sys/devices/virtual/input/input*   registers   0640  system   system
+/sys/devices/virtual/input/input*   interval    0660  system   system
+/sys/devices/virtual/input/input*   single      0660  system   system
+/sys/devices/virtual/input/input*   registers   0660  system   system
 
 # Gyroscope device permission
 /dev/mpu                  0600  system      system

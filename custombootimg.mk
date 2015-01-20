@@ -48,16 +48,12 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/lzo.ko
 	$(hide) rm vendor/lbsony/huashan/proprietary/lib/modules/zram.ko
 
-#	$(hide) rm $(PRODUCT_OUT)/root/charger
-#	$(hide) ln -s /sbin/healthd $(PRODUCT_OUT)/root/charger
 #	$(hide) cd $(PRODUCT_OUT)/root && chmod 755 `ls`
 #	$(hide) cd $(PRODUCT_OUT)/root/sbin && chmod 755 `ls`
 	$(hide) cd $(PRODUCT_OUT)/root && tar -cvf ramdisk.tar `ls $(PRODUCT_OUT)/root`
 	$(hide) mv $(PRODUCT_OUT)/root/ramdisk.tar $(PRODUCT_OUT)/system/bin/ramdisk.tar
 	$(hide) chmod 777 $(PRODUCT_OUT)/system/bin/ramdisk.tar
 
-#	$(hide) rm $(PRODUCT_OUT)/recovery/root/charger
-#	$(hide) ln -s /sbin/healthd $(PRODUCT_OUT)/root/charger
 #	$(hide) cd $(PRODUCT_OUT)/recovery/root && chmod 755 `ls`
 #	$(hide) cd $(PRODUCT_OUT)/recovery/root/etc && chmod 755 `ls`
 #	$(hide) cd $(PRODUCT_OUT)/recovery/root/res && chmod 755 `ls`
@@ -70,6 +66,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) chmod 777 $(PRODUCT_OUT)/system/bin/hijack.tar
 	$(hide) chmod 777 $(PRODUCT_OUT)/system/bin/glove_mode_set.sh
 	$(hide) chmod 777 $(PRODUCT_OUT)/system/bin/wipedata
+	$(hide) chmod 777 $(PRODUCT_OUT)/system/bin/tad_static
 
 	$(hide) ln -s /data/etc/wlan_macaddr0 $(PRODUCT_OUT)/system/etc/firmware/wlan/macaddr0
 	$(hide) ln -s /data/etc/wlan_macaddr1 $(PRODUCT_OUT)/system/etc/firmware/wlan/macaddr1

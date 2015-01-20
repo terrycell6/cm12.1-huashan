@@ -114,16 +114,14 @@ BOARD_CUSTOM_BOOTIMG_MK := device/sony/lbhuashan/custombootimg.mk
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
 TARGET_RECOVERY_FSTAB := device/sony/lbhuashan/rootdir/fstab.qcom
+RECOVERY_FSTAB_VERSION := 2
 
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_USERIMAGES_USE_EXT4 := true
 
-# QCOM/CAF hardware
+# QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
-#TARGET_QCOM_AUDIO_VARIANT := caf
-#TARGET_QCOM_DISPLAY_VARIANT := caf
-#TARGET_QCOM_MEDIA_VARIANT := caf
 TARGET_USES_QCOM_BSP := true
 
 # Audio
@@ -156,22 +154,19 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01400000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1056964608
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
 
-# Symbol compatibility
-TARGET_USES_ICU_COMPAT_SYMBOLS := true
-
 # Enable Minikin text layout engine
 USE_MINIKIN := true
 
 # Include an expanded selection of fonts
 EXTENDED_FONT_FOOTPRINT := true
 
-# Override healthd HAL
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.qcom
-
 # Dumpstate
 BOARD_LIB_DUMPSTATE := libdumpstate.sony
 
 TARGET_USES_LOGD := false
+
+# Include common SE policies
+include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
     device/sony/lbhuashan/sepolicy
@@ -179,26 +174,20 @@ BOARD_SEPOLICY_DIRS += \
 BOARD_SEPOLICY_UNION += \
     file_contexts \
     property_contexts \
-    te_macros \
-    bluetooth_loader.te \
-    bridge.te \
-    camera.te \
-    device.te \
-    dhcp.te \
-    domain.te \
-    drmserver.te \
-    file.te \
-    kickstart.te \
+    bootanim.te \
+    illumination.te \
     init.te \
     mac_update.te \
     mediaserver.te \
-    mpdecision.te \
-    netmgrd.te \
-    qmux.te \
-    rild.te \
+    platform_app.te \
+    property.te \
+    rmt_storage.te \
+    secchand.te \
+    setup_fs.te \
     surfaceflinger.te \
+    system_app.te \
+    system_monitor.te \
     system_server.te \
-    tee.te \
-    thermald.te \
-    ueventd.te \
-    wpa_supplicant.te
+    tad_static.te \
+    ta_qmi_service.te \
+    updatemiscta.te

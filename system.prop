@@ -32,9 +32,6 @@ lpa.use-stagefright=true
 # FM radio
 ro.fm.transmitter=true
 
-# System prop to select audio resampler quality
-af.resampler.quality=255
-
 # System prop to select MPQAudioPlayer by default on mpq8064
 mpq.audio.decode=true
 
@@ -70,6 +67,8 @@ ro.qc.sdk.sensors.gestures=false
 # RIL
 rild.libpath=/system/lib/libril-qc-qmi-1.so
 ro.telephony.call_ring.multiple=0
+persist.radio.oem_socket=false
+ro.ril.telephony.mqanelements=4
 persist.radio.apm_sim_not_pwdn=1
 persist.radio.add_power_save=1
 ro.ril.transmitpower=true

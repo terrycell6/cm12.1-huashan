@@ -27,7 +27,7 @@ How to build:
 Initialize repo:
 
 
-repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0
+repo init -u git://github.com/CyanogenMod/android.git -b cm-12.0
 
 repo sync
 

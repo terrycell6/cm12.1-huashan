@@ -1,0 +1,76 @@
+From 4bc845aad41dcbf2f1930aee9e370534395e7f29 Mon Sep 17 00:00:00 2001
+From: bagyusz <phelyx92@gmail.com>
+Date: Tue, 18 Nov 2014 16:48:16 +0100
+Subject: [PATCH] FmRadio hack
+
+---
+ fmapp2/src/com/caf/fmradio/FMRadioService.java        | 2 +-
+ fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java | 8 ++++----
+ fmapp2/src/com/caf/fmradio/FMTransmitterService.java  | 4 ++--
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/fmapp2/src/com/caf/fmradio/FMRadioService.java b/fmapp2/src/com/caf/fmradio/FMRadioService.java
+index e4818e3..fbe2f47 100644
+--- a/fmapp2/src/com/caf/fmradio/FMRadioService.java
++++ b/fmapp2/src/com/caf/fmradio/FMRadioService.java
+@@ -1765,7 +1765,7 @@ public class FMRadioService extends Service
+             Log.d(LOGTAG, "enableAutoAF done, Status :" +  bStatus);
+ 
+             /* There is no internal Antenna*/
+-            bStatus = mReceiver.setInternalAntenna(false);
++            bStatus = mReceiver.setInternalAntenna(true);
+             Log.d(LOGTAG, "setInternalAntenna done, Status :" +  bStatus);
+ 
+             /* Read back to verify the internal Antenna mode*/
+diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
+index 7ae8762..8e686df 100644
+--- a/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
++++ b/fmapp2/src/com/caf/fmradio/FMTransmitterActivity.java
+@@ -815,7 +815,7 @@ public class FMTransmitterActivity extends Activity {
+    private void setHsPluggedInMsg() {
+       if(mRadioTextTV != null) {
+          mRadioTextTV.setVisibility(View.VISIBLE);
+-         mRadioTextTV.setText(getString(R.string.msg_headsetpluggedin));
++         mRadioTextTV.setText(getString(R.string.msg_noantenna));
+       }
+    }
+ 
+@@ -951,7 +951,7 @@ public class FMTransmitterActivity extends Activity {
+                  Log.d(LOGTAG,"headset plugged in");
+                  if(mRadioTextTV != null) {
+                     mRadioTextTV.setVisibility(View.VISIBLE);
+-                     mRadioTextTV.setText(getString(R.string.msg_headsetpluggedin));
++                     mRadioTextTV.setText(getString(R.string.msg_noantenna));
+                  }
+                  if(mOnOffButton != null) {
+                     mOnOffButton.setEnabled(false);
+@@ -1453,8 +1453,8 @@ public class FMTransmitterActivity extends Activity {
+         if(mService != null) {
+            try {
+                 mService.registerCallbacks(mServiceCallbacks);
+-                if(false == mService.isHeadsetPlugged()) {
+-                   Log.e(LOGTAG, "return for isHeadsetPlugged is false");
++                if(true == mService.isHeadsetPlugged()) {
++                   Log.e(LOGTAG, "return for isHeadsetPlugged is true");
+                    if(SavedDataAndState == null) {
+                       enableRadioHandler.removeCallbacks(enableRadioTask);
+                       disableRadioHandler.removeCallbacks(disableRadioTask);
+diff --git a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
+index fd12c35..89944b5 100644
+--- a/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
++++ b/fmapp2/src/com/caf/fmradio/FMTransmitterService.java
+@@ -1050,9 +1050,9 @@ public class FMTransmitterService extends Service
+                       // Listen for ACTION_HEADSET_PLUG broadcasts.
+                       Log.d(LOGTAG, "mTransmitter: ACTION_HEADSET_PLUG");
+                       Log.d(LOGTAG, "==> intent: " + intent);
+-                      Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 0));
++                      Log.d(LOGTAG, "    state: " + intent.getIntExtra("state", 1));
+                       Log.d(LOGTAG, "    name: " + intent.getStringExtra("name"));
+-                      mHeadsetPlugged = (intent.getIntExtra("state", 0) == 1);
++                      mHeadsetPlugged = (intent.getIntExtra("state", 1) == 0);
+                       mHandler.post(mChangeFMTxState);
+ 
+                    } else if (mA2dpDeviceState.isA2dpStateChange(action)) {
+-- 
+1.9.2
+
