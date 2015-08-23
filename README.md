@@ -31,6 +31,10 @@ repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0
 
 repo sync
 
+cp -r device/sony/lbhuashan/local_manifests .repo
+
+./device/sony/lbhuashan/patches/apply.sh
+
 cd vendor/cm
 
 ./get-prebuilts
