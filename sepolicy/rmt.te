@@ -32,3 +32,5 @@ allow rmt sysfs:file { open append read getattr write };
 allow rmt sysfs:dir rw_dir_perms;
 
 allow rmt sysfs_wake_lock:file { append open };
+
+allow rmt kernel:unix_stream_socket { read write };

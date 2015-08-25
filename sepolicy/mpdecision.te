@@ -29,3 +29,5 @@ allow mpdecision system_data_file:dir { write add_name };
 
 # Set scheduling policy of kernel processes
 allow mpdecision kernel:process setsched;
+
+allow mpdecision kernel:unix_stream_socket { read write };

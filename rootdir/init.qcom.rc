@@ -227,7 +227,11 @@ on boot
     # Read only 1 page at a time
     write /proc/sys/vm/page-cluster 0
 
-    write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 100
+    chmod 664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
+    chmod 664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
+
+    chown system system /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
+    chown system system /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -633,14 +637,8 @@ on property:sys.boot_completed=1
 
 # Xperia SP glove mod enabled
 on property:sys.boot_completed=1
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
     write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 280
     exec /system/bin/glove_mode_set.sh
 
 on property:hw.glove.mod.perm.w.on=1
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
-    chmod 666 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
-
-on property:hw.glove.mod.perm.w.on=0
     exec hw.glove.mod.perm.w.on.sh
