@@ -1,0 +1,325 @@
+From f2316eb594b9f8b7be60c2cce7e3eb86381fb067 Mon Sep 17 00:00:00 2001
+From: bagyusz <phelyx92@gamil.com>
+Date: Wed, 26 Aug 2015 18:45:12 +0200
+Subject: [PATCH] [Revert]Connectivity: Set TCP delayed ACK and User
+ Configuration Flag
+
+Change-Id: Ie99d17de8772e389d28b638064d96757cdbea184
+---
+ core/java/android/net/BaseNetworkStateTracker.java |  22 ----
+ core/java/android/net/MobileDataStateTracker.java  |  41 -------
+ core/java/android/net/NetworkStateTracker.java     |  24 ----
+ .../com/android/server/ConnectivityService.java    | 121 ---------------------
+ wifi/java/android/net/wifi/WifiStateTracker.java   |  18 ---
+ 5 files changed, 226 deletions(-)
+
+diff --git a/core/java/android/net/BaseNetworkStateTracker.java b/core/java/android/net/BaseNetworkStateTracker.java
+index 58b4c53..fa3d61c 100644
+--- a/core/java/android/net/BaseNetworkStateTracker.java
++++ b/core/java/android/net/BaseNetworkStateTracker.java
+@@ -38,12 +38,6 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
+ 
+     public static final String PROP_TCP_BUFFER_UNKNOWN = "net.tcp.buffersize.unknown";
+     public static final String PROP_TCP_BUFFER_WIFI = "net.tcp.buffersize.wifi";
+-    public static final String PROP_TCP_DELACK_DEFAULT = "net.tcp.delack.default";
+-    public static final String PROP_TCP_USERCFG_DEFAULT = "net.tcp.usercfg.default";
+-    public static final String PROP_TCP_DELACK_WIFI = "net.tcp.delack.wifi";
+-    public static final String PROP_TCP_USERCFG_WIFI = "net.tcp.usercfg.wifi";
+-    public static final String PROP_TCP_DELACK_LTE = "net.tcp.delack.lte";
+-    public static final String PROP_TCP_USERCFG_LTE = "net.tcp.usercfg.lte";
+ 
+     protected Context mContext;
+     private Handler mTarget;
+@@ -213,20 +207,4 @@ public abstract class BaseNetworkStateTracker implements NetworkStateTracker {
+         // nothing to do
+     }
+ 
+-    // TCP delayed ack settings
+-    public String getTcpDelayedAckPropName() {
+-        return PROP_TCP_DELACK_DEFAULT;
+-    }
+-
+-    public String getTcpUserConfigPropName() {
+-        return PROP_TCP_USERCFG_DEFAULT;
+-    }
+-
+-    public String getDefaultTcpDelayedAckPropName() {
+-        return PROP_TCP_DELACK_DEFAULT;
+-    }
+-
+-    public String getDefaultTcpUserConfigPropName() {
+-        return PROP_TCP_USERCFG_DEFAULT;
+-    }
+ }
+diff --git a/core/java/android/net/MobileDataStateTracker.java b/core/java/android/net/MobileDataStateTracker.java
+index 7f07631..66f1f5a 100644
+--- a/core/java/android/net/MobileDataStateTracker.java
++++ b/core/java/android/net/MobileDataStateTracker.java
+@@ -505,47 +505,6 @@ public class MobileDataStateTracker extends BaseNetworkStateTracker {
+         return "net.tcp.buffersize." + networkTypeStr;
+     }
+ 
+-    /**
+-     * Return the system properties name associated with the tcp delayed ack settings
+-     * for this network.
+-     */
+-    @Override
+-    public String getTcpDelayedAckPropName() {
+-        String networkTypeStr = "default";
+-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+-                         Context.TELEPHONY_SERVICE);
+-        if (tm != null) {
+-            switch(tm.getNetworkType()) {
+-                case TelephonyManager.NETWORK_TYPE_LTE:
+-                    networkTypeStr = "lte";
+-                    break;
+-                default:
+-                    break;
+-            }
+-        }
+-        return "net.tcp.delack." + networkTypeStr;
+-    }
+-
+-    /**
+-     * Return the system properties name associated with the tcp user config flag
+-     * for this network.
+-     */
+-    @Override
+-    public String getTcpUserConfigPropName() {
+-        String networkTypeStr = "default";
+-        TelephonyManager tm = (TelephonyManager) mContext.getSystemService(
+-                         Context.TELEPHONY_SERVICE);
+-        if (tm != null) {
+-            switch(tm.getNetworkType()) {
+-                case TelephonyManager.NETWORK_TYPE_LTE:
+-                    networkTypeStr = "lte";
+-                    break;
+-                default:
+-                    break;
+-            }
+-        }
+-        return "net.tcp.usercfg." + networkTypeStr;
+-    }
+ 
+     /**
+      * Tear down mobile data connectivity, i.e., disable the ability to create
+diff --git a/core/java/android/net/NetworkStateTracker.java b/core/java/android/net/NetworkStateTracker.java
+index 759c58c..1ca9255 100644
+--- a/core/java/android/net/NetworkStateTracker.java
++++ b/core/java/android/net/NetworkStateTracker.java
+@@ -131,30 +131,6 @@ public interface NetworkStateTracker {
+     public String getTcpBufferSizesPropName();
+ 
+     /**
+-     * Return the system properties name associated with the tcp delayed ack settings
+-     * for this network.
+-     */
+-    public String getTcpDelayedAckPropName();
+-
+-    /**
+-     * Return the system properties name associated with the tcp user config flag
+-     * for this network.
+-     */
+-    public String getTcpUserConfigPropName();
+-
+-    /**
+-      * Return the default system properties name associated with the tcp delayed ack settings
+-      * for this network.
+-      */
+-    public String getDefaultTcpDelayedAckPropName();
+-
+-    /**
+-     * Return the default system properties name associated with the tcp user config flag
+-     * for this network.
+-     */
+-    public String getDefaultTcpUserConfigPropName();
+-
+-    /**
+      * Disable connectivity to a network
+      * @return {@code true} if a teardown occurred, {@code false} if the
+      * teardown did not occur.
+diff --git a/services/java/com/android/server/ConnectivityService.java b/services/java/com/android/server/ConnectivityService.java
+index e264670..0d4f853 100644
+--- a/services/java/com/android/server/ConnectivityService.java
++++ b/services/java/com/android/server/ConnectivityService.java
+@@ -2087,8 +2087,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
+                 }
+                 mActiveDefaultNetwork = -1;
+ 
+-                // If there is no active connection then tcp delayed ack params are reset
+-                resetTcpDelayedAckSettings(mNetTrackers[prevNetType]);
+             }
+ 
+             // don't signal a reconnect for anything lower or equal priority than our
+@@ -2386,8 +2384,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
+             // Don't do this - if we never sign in stay, grey
+             //reportNetworkCondition(mActiveDefaultNetwork, 100);
+ 
+-            // Update TCP delayed ACK settings
+-            updateTcpDelayedAckSettings(thisNet);
+             updateNetworkSettings(thisNet);
+         }
+         thisNet.setTeardownRequested(false);
+@@ -2813,119 +2809,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
+         }
+     }
+ 
+-    /**
+-     * [net.tcp.delack.wifi] and set them for system
+-     * wide use
+-     */
+-    private void resetTcpDelayedAckSettings(NetworkStateTracker nt) {
+-        String key1 = nt.getDefaultTcpUserConfigPropName();
+-        String key2 = nt.getDefaultTcpDelayedAckPropName();
+-
+-        String defUserCfg = SystemProperties.get(key1);
+-        String defDelAck = SystemProperties.get(key2);
+-
+-        if (TextUtils.isEmpty(defUserCfg) || defUserCfg.length() == 0) {
+-            if (DBG) loge(key1+ " not found in system default properties");
+-
+-            // Setting to default values so we won't be stuck to previous values
+-            // Disable user-overridden values to default
+-            defUserCfg = "0";
+-        }
+-        setUserConfig(defUserCfg);
+-
+-        if(TextUtils.isEmpty(defDelAck) || defDelAck.length() == 0) {
+-            if (DBG) loge(key2 + " not found in system default properties");
+-
+-            // Setting to default values so we won't be stuck to previous values
+-            // Disable user-overridden values to default
+-            defDelAck= "1";
+-        }
+-        setDelAckSize(defDelAck);
+-    }
+-
+-    /**
+-     * [net.tcp.delack.default] and set them for system
+-     * wide use
+-     */
+-    private void updateTcpDelayedAckSettings(NetworkStateTracker nt) {
+-        String key1 = nt.getTcpUserConfigPropName();
+-        String key2 = nt.getTcpDelayedAckPropName();
+-
+-        String userCfg = SystemProperties.get(key1);
+-        String delAck = SystemProperties.get(key2);
+-
+-        if (TextUtils.isEmpty(userCfg)) {
+-            if (DBG) loge(key1 + " not found in system properties. Using defaults");
+-
+-            // Setting to default values so we won't be stuck to previous values
+-            key1 = nt.getDefaultTcpUserConfigPropName();
+-            userCfg = SystemProperties.get(key1);
+-        }
+-
+-        if (TextUtils.isEmpty(delAck)) {
+-            if (DBG) loge(key2 + " not found in system properties. Using defaults");
+-
+-            // Setting to default values so we won't be stuck to previous values
+-            key2 = nt.getDefaultTcpDelayedAckPropName();
+-            delAck = SystemProperties.get(key2);
+-        }
+-
+-        // Set values in kernel
+-        if (userCfg.length() != 0) {
+-            if (DBG) {
+-                log("Setting TCP values: [" + userCfg
+-                        + "] which comes from [" + key1 + "]");
+-            }
+-            setUserConfig(userCfg);
+-        }
+-
+-        if (delAck.length() != 0) {
+-            if (DBG) {
+-                log("Setting TCP values: [" + delAck
+-                        + "] which comes from [" + key2 + "]");
+-            }
+-            setDelAckSize(delAck);
+-        }
+-    }
+-
+-    /**
+-     * Writes TCP delayed ACK sizes to /sys/net/ipv4/tcp_delack_seg]
+-     *
+-     */
+-    private void setDelAckSize(String delAckSize) {
+-        try {
+-            final String mProcFile = "/sys/kernel/ipv4/tcp_delack_seg";
+-            int delAck = Integer.parseInt(delAckSize);
+-
+-            if (delAck <= 0 || delAck > 60) {
+-               if (DBG) loge(" delAck size is out of range, configuring to default");
+-               delAck = 1;
+-            }
+-
+-            FileUtils.stringToFile(mProcFile, delAckSize);
+-        } catch (IOException e) {
+-            loge("Can't set delayed ACK size:" + e);
+-        }
+-    }
+-
+-    /**
+-     * Writes TCP user configuration flag to /sys/net/ipv4/tcp_use_usercfg]
+-     *
+-     */
+-    private void setUserConfig(String userConfig) {
+-        try {
+-            int userCfg = Integer.parseInt(userConfig);
+-            final String mProcFile = "/sys/kernel/ipv4/tcp_use_userconfig";
+-
+-            if (userCfg == 0 || userCfg == 1) {
+-                FileUtils.stringToFile(mProcFile, userConfig);
+-            } else {
+-                loge("Invalid buffersize string: " + userConfig);
+-            }
+-        } catch (IOException e) {
+-            loge("Can't set delayed ACK size:" + e);
+-        }
+-    }
+ 
+     /**
+      * Adjust the per-process dns entries (net.dns<x>.<pid>) based
+@@ -3240,10 +3123,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
+                 case NetworkStateTracker.EVENT_NETWORK_SUBTYPE_CHANGED: {
+                     info = (NetworkInfo) msg.obj;
+                     int type = info.getType();
+-                    if (mNetConfigs[type].isDefault()) {
+-                        updateNetworkSettings(mNetTrackers[type]);
+-                        updateTcpDelayedAckSettings(mNetTrackers[type]);
+-                    }
+                     break;
+                 }
+             }
+diff --git a/wifi/java/android/net/wifi/WifiStateTracker.java b/wifi/java/android/net/wifi/WifiStateTracker.java
+index af93df3..615c893 100644
+--- a/wifi/java/android/net/wifi/WifiStateTracker.java
++++ b/wifi/java/android/net/wifi/WifiStateTracker.java
+@@ -259,24 +259,6 @@ public class WifiStateTracker extends BaseNetworkStateTracker {
+         return "net.tcp.buffersize.wifi";
+     }
+ 
+-    /**
+-     * Return the system properties name associated with the tcp delayed ack settings
+-     * for this network.
+-     */
+-    @Override
+-    public String getTcpDelayedAckPropName() {
+-        return "net.tcp.delack.wifi";
+-    }
+-
+-    /**
+-     * Return the system properties name associated with the tcp user config flag
+-     * for this network.
+-     */
+-    @Override
+-    public String getTcpUserConfigPropName() {
+-        return "net.tcp.usercfg.wifi";
+-    }
+-
+     private class WifiStateReceiver extends BroadcastReceiver {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+-- 
+1.9.1
+
