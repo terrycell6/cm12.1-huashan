@@ -48,7 +48,6 @@ PRODUCT_AAPT_PREF_CONFIG := xhdpi
 # Device specific init
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/hw.glove.mod.perm.w.on.sh:root/hw.glove.mod.perm.w.on.sh \
-    $(LOCAL_PATH)/rootdir/zram.sh:root/zram.sh \
     $(LOCAL_PATH)/rootdir/init.qcom.syspart_fixup.sh:root/init.qcom.syspart_fixup.sh \
     $(LOCAL_PATH)/rootdir/init.device.rc:root/init.device.rc \
     $(LOCAL_PATH)/rootdir/init.qcom.rc:root/init.qcom.rc \

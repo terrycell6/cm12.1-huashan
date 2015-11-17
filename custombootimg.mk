@@ -34,6 +34,9 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(PRODUCT_OUT)/kernel $(uncompressed_ramdisk) $(r
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
 	$(hide) cp -r vendor/lbsony/huashan/proprietary/kernel/boot.img $(PRODUCT_OUT)
 
+	$(hide) rm -fr $(PRODUCT_OUT)/system/lib/modules
+	$(hide) cp -r vendor/lbsony/huashan/proprietary/lib/modules $(PRODUCT_OUT)/system/lib
+
 	$(hide) cd $(PRODUCT_OUT)/root && chmod 755 `ls`
 	$(hide) cd $(PRODUCT_OUT)/root/sbin && chmod 755 `ls`
 	$(hide) cd $(PRODUCT_OUT)/root && tar -cvf ramdisk.tar `ls $(PRODUCT_OUT)/root`
