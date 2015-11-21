@@ -1,0 +1,1 @@
+allow zygote kernel:unix_stream_socket { read write };

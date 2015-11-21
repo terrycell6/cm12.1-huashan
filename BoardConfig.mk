@@ -165,6 +165,7 @@ BOARD_SEPOLICY_UNION += \
     file.te \
     kickstart.te \
     init.te \
+    installd.te \
     mac_update.te \
     mediaserver.te \
     mpdecision.te \
@@ -178,5 +179,6 @@ BOARD_SEPOLICY_UNION += \
     thermald.te \
     ueventd.te \
     vold.te \
-    wpa_supplicant.te
+    wpa_supplicant.te \
+    zygote.te
 

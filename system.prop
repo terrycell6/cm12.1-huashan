@@ -21,13 +21,10 @@ persist.timed.enable=true
 ro.sf.lcd_density=320
 
 # System props for audio
-qcom.audio.init=complete
 persist.audio.fluence.mode=endfire
-persist.audio.vr.enable=false
 persist.audio.handset.mic=digital
 persist.audio.lowlatency.rec=false
 lpa.decode=true
-lpa.use-stagefright=true
 
 # FM radio
 ro.fm.transmitter=true
@@ -35,55 +32,19 @@ ro.fm.transmitter=true
 # System prop to select audio resampler quality
 af.resampler.quality=255
 
-# System prop to select MPQAudioPlayer by default on mpq8064
-mpq.audio.decode=true
-
 ##fluencetype can be "fluence" or "fluencepro" or "none"
 ro.qc.sdk.audio.fluencetype=fluence
 
-# System property for cabl
-ro.qualcomm.cabl=0
-
-#property to enable user to access Google WFD settings.
-persist.debug.wfd.enable=1
-
-#property to choose between virtual/external wfd display
-persist.sys.wfd.virtual=0
-
-# MM modules
-media.stagefright.enable-player=true
-media.stagefright.enable-http=true
-media.stagefright.enable-aac=true
-media.stagefright.enable-qcp=true
-media.stagefright.enable-fma2dp=true
-media.stagefright.enable-scan=true
-media.aac_51_output_enabled=true
-
-# Hardware codecs
-qcom.hw.aac.encoder=true
-
-#snapdragon value add features
-ro.qc.sdk.camera.facialproc=true
-ro.qc.sdk.gestures.camera=false
-ro.qc.sdk.sensors.gestures=false
-
 # RIL
-ro.telephony.ril_class=SonyQualcomm8x60RIL
-DEVICE_PROVISIONED=1
 rild.libpath=/system/lib/libril-qc-qmi-1.so
-rild.libargs=-d /dev/smd0
-ril.subscription.types=NV,RUIM
 persist.radio.apm_sim_not_pwdn=1
 persist.radio.add_power_save=1
 ro.telephony.call_ring.multiple=0
 ro.ril.transmitpower=true
 ro.telephony.default_network=9
-telephony.lteOnCdmaDevice=0
-telephony.lteOnGsmDevice=1
 
 # Netmgrd
 ro.use_data_netmgrd=true
-persist.rmnet.mux=disabled
 
 # BT
 ro.qualcomm.bt.hci_transport=smd
