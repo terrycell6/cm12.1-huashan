@@ -169,6 +169,7 @@ BOARD_SEPOLICY_UNION += \
     mac_update.te \
     mediaserver.te \
     mpdecision.te \
+    netd.te \
     netmgrd.te \
     qmux.te \
     rild.te \
