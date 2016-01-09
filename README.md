@@ -24,12 +24,17 @@ This branch is for building CyanogenMod 11 (or Android KitKat 4.4 AOSP based rom
 
 How to build Slimkat 4.4.4:
 
+repo init -u git://github.com/SlimRoms/platform_manifest.git -b kk4.4-caf
+
+repo sync
+
+
 Compile:
 
 . build/envsetup.sh
 
 make clean
 
-lunch
+lunch slim_lbhuashan-userdebug
 
-make -j8 otapackage 
+make -j8 bacon

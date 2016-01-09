@@ -25,16 +25,30 @@ on early-init
 
 on init
 
+    mkdir /mnt/shell/emulated 0700 shell shell
+    mkdir /storage/emulated 0555 root root
+
     mkdir /mnt/media_rw/sdcard0 0700 media_rw media_rw
+    mkdir /mnt/media_rw/sdcard1 0700 media_rw media_rw
+    mkdir /storage/usbdisk 0000 system system
     mkdir /mnt/media_rw/usbdisk 0700 media_rw media_rw
+
     mkdir /storage/sdcard0 0700 root root
+    mkdir /storage/sdcard1 0700 root root
     mkdir /storage/usbdisk 0700 root root
 
-    export EXTERNAL_STORAGE /storage/sdcard0
+    export EXTERNAL_STORAGE /storage/emulated/legacy
+    export SECONDARY_STORAGE /storage/sdcard1
+    export EMULATED_STORAGE_SOURCE /mnt/shell/emulated
+    export EMULATED_STORAGE_TARGET /storage/emulated
 
     # for backwards compatibility
-    symlink /storage/sdcard0 /sdcard
-    symlink /storage/sdcard0 /mnt/sdcard
+    symlink /storage/emulated/legacy /sdcard
+    symlink /storage/emulated/legacy /mnt/sdcard
+    symlink /storage/emulated/legacy /storage/sdcard0
+    symlink /mnt/shell/emulated/0 /storage/emulated/legacy
+    symlink /storage/sdcard1 /ext_card
+    symlink /storage/sdcard1 /mnt/ext_card
     symlink /storage/usbdisk /usbdisk
     symlink /storage/usbdisk /mnt/usbdisk
 
@@ -45,6 +59,7 @@ on init
 
 on fs
     mount_all ./fstab.qcom
+    setprop ro.crypto.fuse_sdcard true
 
     wait /system
 
@@ -55,8 +70,6 @@ on fs
     mount ext4 /dev/block/platform/msm_sdcc.1/by-name/LTALabel /lta-label nosuid nodev noatime noexec ro barrier=0
     chown system system /lta-label
     chmod 0555 /lta-label
-
-    chmod 0775 /data/etc
 
     # SEMC: Start the TrimArea Daemon and early TA-users
     class_start trimarea
@@ -90,18 +103,8 @@ on early-boot
 
 on boot
 
-    # fast boot up
-    write /sys/devices/system/cpu/cpu0/online 1
-    write /sys/devices/system/cpu/cpu1/online 1
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "performance"
-    write /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor "performance"
-
     # Install exfat module to support exfat file system
     insmod /system/lib/modules/texfat.ko
-
-    # load custom kernel modules
-    insmod /system/lib/modules/cpufreq_wheatley.ko
-    insmod /system/lib/modules/cpufreq_conservative.ko
 
     exec /system/bin/btnvtool -O
     chown bluetooth bluetooth /sys/module/bluetooth_power/parameters/power
@@ -181,8 +184,8 @@ on boot
 
     chown root system /proc/net/ip_conntrack
 
-    # 4.3 requires this
-    chmod 0644 /proc/cmdline
+    # WTF
+    chmod 644 /proc/cmdline
 
     #To allow interfaces to get v6 address when tethering is enabled
     write /proc/sys/net/ipv6/conf/rmnet0/accept_ra 2
@@ -213,11 +216,6 @@ on boot
     # connections on high-throughput links get dropped when
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
-
-    exec /system/bin/cal_data_manager init
-
-    # Read only 1 page at a time
-    write /proc/sys/vm/page-cluster 0
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -301,8 +299,6 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
-    rm /data/local/tmp/adreno_config.txt
-
     # communicate with mpdecision and thermald
     mkdir /dev/socket/mpdecision 0770 system system
     chmod 2770 /dev/socket/mpdecision
@@ -323,6 +319,7 @@ on post-fs-data
     write /sys/module/pm_8x60/modes/cpu0/power_collapse/idle_enabled 1
     write /sys/module/msm_thermal/core_control/enabled 0
     write /sys/devices/system/cpu/cpu1/online 1
+    start mpdecision
 
     # interactive
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
@@ -336,6 +333,10 @@ on post-fs-data
 
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 384000
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq 384000
+    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    chown system /sys/devices/system/cpu/cpu1/cpufreq/scaling_min_freq
     write /sys/module/msm_thermal/core_control/enabled 1
     chown root system /sys/devices/system/cpu/mfreq
     chmod 220 /sys/devices/system/cpu/mfreq
@@ -381,13 +382,7 @@ on post-fs-data
     chmod 664 /sys/module/msm_mpdecision/slack_time_max_us
     chmod 664 /sys/module/msm_mpdecision/slack_time_min_us
 
-# GPU governor
-    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/policy "trustzone"
-    write /sys/devices/platform/kgsl-3d0.0/kgsl/kgsl-3d0/pwrscale/trustzone "ondemand"
-
     write /sys/devices/platform/msm_sdcc.3/idle_timeout 10
-
-    start mpdecision
 
 on charger
     # Enable Power modes and set the CPU Freq Sampling rates
@@ -570,31 +565,17 @@ on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
+# virtual sdcard daemon running as media_rw (1023)
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 /mnt/media_rw/sdcard1 /storage/sdcard1
     class late_start
     disabled
 
-service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
+service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -w 1023 /mnt/media_rw/usbdisk /storage/usbdisk
     class late_start
     disabled
-
-service thermald /system/bin/thermald
-   class main
-   user root
-   group root
-   disabled
-
-service thermal-engine /system/bin/thermal-engine
-   class main
-   user root
-   group root
-   disabled
-
-on property:qcom.thermal=thermald
-    start thermald
-
-on property:qcom.thermal=thermal-engine
-    start thermal-engine
 
 # use system_monitor
 service system_monitor /system/bin/system_monitor
@@ -639,10 +620,3 @@ service setup_fs /system/bin/setup_fs /dev/block/platform/msm_sdcc.1/by-name/Use
     user root
     group root
     oneshot
-
-# Xperia SP glove mod enabled
-on property:sys.boot_completed=1
-    chmod 664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
-    chmod 664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold
-    write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity 0
-    write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 280

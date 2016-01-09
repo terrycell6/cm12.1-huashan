@@ -75,8 +75,6 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 
 BOARD_USE_SONY_MACUPDATE := true
 
-BOARD_HARDWARE_CLASS += device/sony/lbhuashan/cmhw
-
 # Camera
 USE_DEVICE_SPECIFIC_CAMERA := true
 
@@ -94,7 +92,7 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/sony/lbhuashan/bluetooth
 BOARD_HAVE_NFC := true
 
 # Needed for blobs
-COMMON_GLOBAL_CFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
+TARGET_GLOBAL_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
 
 # Time
 BOARD_USES_QC_TIME_SERVICES := true
@@ -108,6 +106,7 @@ BOARD_CUSTOM_BOOTIMG_MK := device/sony/lbhuashan/custombootimg.mk
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
 TARGET_RECOVERY_FSTAB := device/sony/lbhuashan/rootdir/fstab.qcom
+RECOVERY_FSTAB_VERSION := 2
 
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
