@@ -15,13 +15,13 @@ mount_needed=false;
 
 if [ "$ACTUAL" = "136" ];then
   mount -o rw,remount,barrier=1 /system
-  sed -i 's/^.*echo.*$/echo '$ACTUAL' > '$GLOVEMODENODE'/' /system/bin/glove_mode_set.sh
+  sed -i 's/^.*echo.*$/echo '$ACTUAL' > '$GLOVEMODENODE'/' /system/bin/glove_mode_set
   mount_needed=true;
 fi
 
 if [ "$ACTUAL" = "0" ];then
   mount -o rw,remount,barrier=1 /system
-  sed -i 's/^.*echo.*$/echo '$ACTUAL' > '$GLOVEMODENODE'/' /system/bin/glove_mode_set.sh
+  sed -i 's/^.*echo.*$/echo '$ACTUAL' > '$GLOVEMODENODE'/' /system/bin/glove_mode_set
   mount_needed=true;
 fi
 

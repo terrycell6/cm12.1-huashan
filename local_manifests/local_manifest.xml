@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
-
-  <remote  name="bagyusz"
-           fetch="https://bitbucket.org/bagyusz" />
-
-    <!-- -O3 optimization -->
-    <remove-project name="CyanogenMod/android_build" />
-    <project path="build" remote="bagyusz" name="android_build" revision="cm-11.0" >
-        <copyfile src="core/root.mk" dest="Makefile" />
-    </project>
-
-    <!-- GCC 4.8 -->
-    <project path="prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" name="platform/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8" remote="aosp" revision="refs/tags/android-5.0.2_r1"/>
-    <project path="prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.8" name="platform/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.8" remote="aosp" revision="refs/tags/android-5.0.2_r1" />
-
     <project path="device/qcom/common" name="CyanogenMod/android_device_qcom_common" remote="github" revision="cm-11.0" />
     <project path="hardware/sony/DASH" name="CyanogenMod/android_hardware_sony_DASH" remote="github" revision="cm-11.0" />
     <project path="hardware/qcom/fm" name="CyanogenMod/android_hardware_qcom_fm" remote="github" revision="cm-11.0" />
