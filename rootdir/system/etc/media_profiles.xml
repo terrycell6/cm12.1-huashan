@@ -47,7 +47,7 @@
 <!ATTLIST Audio sampleRate CDATA #REQUIRED>
 <!ATTLIST Audio channels (1|2|6) #REQUIRED>
 <!ELEMENT ImageEncoding EMPTY>
-<!ATTLIST ImageEncoding quality (100|90|80|70|60|50) #REQUIRED>
+<!ATTLIST ImageEncoding quality (90|80|70|60|50|40) #REQUIRED>
 <!ELEMENT ImageDecoding EMPTY>
 <!ATTLIST ImageDecoding memCap CDATA #REQUIRED>
 <!ELEMENT Camera EMPTY>
@@ -200,10 +200,10 @@
             channels="2" />
     </EncoderProfile>
 
-        <ImageEncoding quality="100" />
         <ImageEncoding quality="90" />
         <ImageEncoding quality="80" />
-        <ImageDecoding memCap="40000000" />
+        <ImageEncoding quality="70" />
+        <ImageDecoding memCap="20000000" />
 
         <Camera previewFrameRate="0" />
 
@@ -237,10 +237,10 @@
             channels="1" />
     </EncoderProfile>
 
-        <ImageEncoding quality="100" />
         <ImageEncoding quality="90" />
         <ImageEncoding quality="80" />
-        <ImageDecoding memCap="40000000" />
+        <ImageEncoding quality="70" />
+        <ImageDecoding memCap="20000000" />
 
         <Camera previewFrameRate="0" />
 
@@ -273,7 +273,7 @@
         minFrameRate="15" maxFrameRate="30" />
 
     <AudioEncoderCap name="aac" enabled="true"
-        minBitRate="8000" maxBitRate="128000"
+        minBitRate="8000" maxBitRate="96000"
         minSampleRate="8000" maxSampleRate="48000"
         minChannels="1" maxChannels="6" />
 
