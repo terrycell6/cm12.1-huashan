@@ -217,6 +217,9 @@ on boot
     # an ack packet comes out of order
     write /proc/sys/net/netfilter/nf_conntrack_tcp_be_liberal 1
 
+    # Read only 1 page at a time
+    write /proc/sys/vm/page-cluster 0
+
 # msm specific files that need to be created on /data
 on post-fs-data
 
