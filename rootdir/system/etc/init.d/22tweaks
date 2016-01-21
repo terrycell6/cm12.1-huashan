@@ -1,0 +1,16 @@
+#!/system/bin/sh
+
+# VM tweak
+chmod 644 /proc/sys/vm/*
+echo 500 > /proc/sys/vm/dirty_expire_centisecs
+echo 3000 > /proc/sys/vm/dirty_writeback_centisecs
+echo 0 > /proc/sys/vm/block_dump
+echo 0 > /proc/sys/vm/laptop_mode
+echo 2 > /proc/sys/vm/min_free_order_shift
+echo 1 > /proc/sys/vm/overcommit_memory
+echo 150 > /proc/sys/vm/overcommit_ratio
+echo 70 > /proc/sys/vm/swappiness
+setprop persist.sys.purgeable_assets 0
+echo 2048 > /proc/sys/vm/min_free_kbytes
+echo 10 > /proc/sys/vm/dirty_background_ratio
+echo 20 > /proc/sys/vm/dirty_ratio
