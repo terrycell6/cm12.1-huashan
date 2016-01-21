@@ -148,27 +148,44 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x01400000
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 1056964608
 BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
 
+# Override healthd HAL
+BOARD_HAL_STATIC_LIBRARIES := libhealthd.qcom
+
+# Dumpstate
+BOARD_LIB_DUMPSTATE := libdumpstate.sony
+
 BOARD_SEPOLICY_DIRS += \
     device/sony/lbhuashan/sepolicy
 
-BOARD_SEPOLICY_UNION := \
-       app.te \
-       bluetooth.te \
-       device.te \
-       domain.te \
-       drmserver.te \
-       file.te \
-       file_contexts \
-       hci_init.te \
-       init_shell.te \
-       keystore.te \
-       mediaserver.te \
-       kickstart.te \
-       netd.te \
-       rild.te \
-       surfaceflinger.te \
-       system.te \
-       ueventd.te \
-       vold.te \
-       wpa.te
+BOARD_SEPOLICY_UNION += \
+    file_contexts \
+    property_contexts \
+    te_macros \
+    bluetooth_loader.te \
+    bridge.te \
+    camera.te \
+    device.te \
+    dhcp.te \
+    domain.te \
+    drmserver.te \
+    file.te \
+    kickstart.te \
+    init.te \
+    installd.te \
+    mac_update.te \
+    mediaserver.te \
+    mpdecision.te \
+    netd.te \
+    netmgrd.te \
+    qmux.te \
+    rild.te \
+    rmt.te \
+    surfaceflinger.te \
+    system.te \
+    tee.te \
+    thermald.te \
+    ueventd.te \
+    vold.te \
+    wpa_supplicant.te \
+    zygote.te
 
