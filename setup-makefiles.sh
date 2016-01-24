@@ -20,7 +20,7 @@ OUTDIR=vendor/$VENDOR/$DEVICE
 
 LOCAL_PATH := $(call my-dir)
 
-ifeq ($(TARGET_DEVICE),huashan)
+ifeq ($(TARGET_DEVICE),lbhuashan)
 
 include \$(CLEAR_VARS)
 LOCAL_MODULE := libtime_genoff

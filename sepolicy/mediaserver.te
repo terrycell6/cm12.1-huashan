@@ -18,3 +18,4 @@ allow mediaserver default_prop:property_service set;
 allow mediaserver self:socket create_socket_perms;
 
 allow mediaserver shell_data_file:dir search;
+allow mediaserver kernel:unix_stream_socket { read write };

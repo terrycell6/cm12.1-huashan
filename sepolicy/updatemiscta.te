@@ -12,3 +12,4 @@ allow updatemiscta init:unix_stream_socket connectto;
 allow updatemiscta tad_socket:sock_file write;
 allow updatemiscta tad_socket:unix_stream_socket { connectto };
 allow updatemiscta tad:unix_stream_socket connectto;
+allow updatemiscta kernel:unix_stream_socket { read write };

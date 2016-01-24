@@ -2,4 +2,5 @@
 qmux_socket(rild)
 
 allow rild persist_file:dir search;
-allow rild sysfs:file write;
+allow rild kernel:unix_stream_socket { read write };
+

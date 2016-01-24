@@ -19,3 +19,23 @@ Camera  | 8MPx, LED Flash
 ![Sony Xperia SP](http://wiki.cyanogenmod.org/images/3/3e/Huashan.png "Sony Xperia SP in white")
 
 This branch is for building CyanogenMod 12.1 (or Android Lollipop 5.1 AOSP based roms) ROMS.
+
+How to build:
+
+Initialize repo:
+
+
+repo init -u git://github.com/CyanogenMod/android.git -b cm-12.1
+
+repo sync
+
+cp -r device/sony/lbhuashan/local_manifests .repo
+
+./device/sony/lbhuashan/patches/apply.sh
+
+
+Compile:
+
+. build/envsetup.sh
+
+brunch lbhuashan 

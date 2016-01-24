@@ -1,0 +1,122 @@
+From 9f0edb942a459b84da618dfd811e02fb6854f173 Mon Sep 17 00:00:00 2001
+From: bagyusz <phelyx92@gmail.com>
+Date: Sat, 23 Jan 2016 16:28:33 +0100
+Subject: [PATCH] [revert] display: Add support for interleaved YUY2 and YUYV
+ format.  Add support for interleaved HAL_PIXEL_FORMAT_YCbCr_422_I and 
+ HAL_PIXEL_FORMAT_YCrCb_422_I format in display HAL.
+
+Change-Id: If2e6ecb06a6a7497cf35ae0abb83d2c9efce8c27
+---
+ libcopybit/copybit.cpp          | 2 --
+ libgralloc/alloc_controller.cpp | 6 ------
+ libgralloc/gralloc_priv.h       | 1 -
+ liboverlay/overlayUtils.cpp     | 8 --------
+ liboverlay/overlayUtils.h       | 3 ---
+ 5 files changed, 20 deletions(-)
+
+diff --git a/libcopybit/copybit.cpp b/libcopybit/copybit.cpp
+index 5f48e07..39d963d 100644
+--- a/libcopybit/copybit.cpp
++++ b/libcopybit/copybit.cpp
+@@ -127,8 +127,6 @@ static int get_format(int format) {
+         case HAL_PIXEL_FORMAT_RGB_888:       return MDP_RGB_888;
+         case HAL_PIXEL_FORMAT_RGBA_8888:     return MDP_RGBA_8888;
+         case HAL_PIXEL_FORMAT_BGRA_8888:     return MDP_BGRA_8888;
+-        case HAL_PIXEL_FORMAT_YCrCb_422_I:   return MDP_YCRYCB_H2V1;
+-        case HAL_PIXEL_FORMAT_YCbCr_422_I:   return MDP_YCBYCR_H2V1;
+         case HAL_PIXEL_FORMAT_YCrCb_422_SP:  return MDP_Y_CRCB_H2V1;
+         case HAL_PIXEL_FORMAT_YCrCb_420_SP:  return MDP_Y_CRCB_H2V2;
+         case HAL_PIXEL_FORMAT_YCbCr_422_SP:  return MDP_Y_CBCR_H2V1;
+diff --git a/libgralloc/alloc_controller.cpp b/libgralloc/alloc_controller.cpp
+index b1923ec..ab8e6b3 100644
+--- a/libgralloc/alloc_controller.cpp
++++ b/libgralloc/alloc_controller.cpp
+@@ -146,8 +146,6 @@ int AdrenoMemInfo::getStride(int width, int format)
+             case HAL_PIXEL_FORMAT_YV12:
+             case HAL_PIXEL_FORMAT_YCbCr_422_SP:
+             case HAL_PIXEL_FORMAT_YCrCb_422_SP:
+-            case HAL_PIXEL_FORMAT_YCbCr_422_I:
+-            case HAL_PIXEL_FORMAT_YCrCb_422_I:
+                 stride = ALIGN(width, 16);
+                 break;
+             case HAL_PIXEL_FORMAT_YCbCr_420_SP_VENUS:
+@@ -361,8 +359,6 @@ size_t getBufferSizeAndDimensions(int width, int height, int format,
+             break;
+         case HAL_PIXEL_FORMAT_YCbCr_422_SP:
+         case HAL_PIXEL_FORMAT_YCrCb_422_SP:
+-        case HAL_PIXEL_FORMAT_YCbCr_422_I:
+-        case HAL_PIXEL_FORMAT_YCrCb_422_I:
+             if(width & 1) {
+                 ALOGE("width is odd for the YUV422_SP format");
+                 return -EINVAL;
+@@ -457,8 +453,6 @@ int getYUVPlaneInfo(private_handle_t* hnd, struct android_ycbcr* ycbcr)
+             ycbcr->chroma_step = 2;
+             break;
+         //Unsupported formats
+-        case HAL_PIXEL_FORMAT_YCbCr_422_I:
+-        case HAL_PIXEL_FORMAT_YCrCb_422_I:
+         case HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED:
+         default:
+         ALOGD("%s: Invalid format passed: 0x%x", __FUNCTION__,
+diff --git a/libgralloc/gralloc_priv.h b/libgralloc/gralloc_priv.h
+index d414f7d..9ec76db 100644
+--- a/libgralloc/gralloc_priv.h
++++ b/libgralloc/gralloc_priv.h
+@@ -105,7 +105,6 @@ enum {
+     HAL_PIXEL_FORMAT_RG_88                  = 0x10E,
+     HAL_PIXEL_FORMAT_YCbCr_444_SP           = 0x10F,
+     HAL_PIXEL_FORMAT_YCrCb_444_SP           = 0x110,
+-    HAL_PIXEL_FORMAT_YCrCb_422_I            = 0x111,
+     HAL_PIXEL_FORMAT_NV21_ZSL               = 0x112,
+     HAL_PIXEL_FORMAT_INTERLACE              = 0x180,
+ 
+diff --git a/liboverlay/overlayUtils.cpp b/liboverlay/overlayUtils.cpp
+index 64a0bb6..af68cb9 100644
+--- a/liboverlay/overlayUtils.cpp
++++ b/liboverlay/overlayUtils.cpp
+@@ -114,10 +114,6 @@ int getMdpFormat(int format) {
+             return MDP_Y_CBCR_H2V2;
+         case HAL_PIXEL_FORMAT_YCrCb_422_SP:
+             return MDP_Y_CRCB_H2V1;
+-        case HAL_PIXEL_FORMAT_YCbCr_422_I:
+-            return MDP_YCBYCR_H2V1;
+-        case HAL_PIXEL_FORMAT_YCrCb_422_I:
+-            return MDP_YCRYCB_H2V1;
+         case HAL_PIXEL_FORMAT_YCbCr_444_SP:
+             return MDP_Y_CBCR_H1V1;
+         case HAL_PIXEL_FORMAT_YCrCb_444_SP:
+@@ -170,10 +166,6 @@ int getHALFormat(int mdpFormat) {
+             return HAL_PIXEL_FORMAT_YCbCr_420_SP;
+         case MDP_Y_CRCB_H2V1:
+             return HAL_PIXEL_FORMAT_YCrCb_422_SP;
+-        case MDP_YCBYCR_H2V1:
+-            return HAL_PIXEL_FORMAT_YCbCr_422_I;
+-        case MDP_YCRYCB_H2V1:
+-            return HAL_PIXEL_FORMAT_YCrCb_422_I;
+          case MDP_Y_CBCR_H1V1:
+             return HAL_PIXEL_FORMAT_YCbCr_444_SP;
+         case MDP_Y_CRCB_H1V1:
+diff --git a/liboverlay/overlayUtils.h b/liboverlay/overlayUtils.h
+index 231887c..ad4dd87 100644
+--- a/liboverlay/overlayUtils.h
++++ b/liboverlay/overlayUtils.h
+@@ -483,8 +483,6 @@ inline bool isYuv(uint32_t format) {
+         case MDP_Y_CR_CB_H2V2:
+         case MDP_Y_CR_CB_GH2V2:
+         case MDP_Y_CBCR_H2V2_VENUS:
+-        case MDP_YCBYCR_H2V1:
+-        case MDP_YCRYCB_H2V1:
+             return true;
+         default:
+             return false;
+@@ -514,7 +512,6 @@ inline const char* getFormatString(int format){
+         "MDP_ARGB_8888",
+         "MDP_RGB_888",
+         "MDP_Y_CRCB_H2V2",
+-        "MDP_YCBYCR_H2V1",
+         "MDP_YCRYCB_H2V1",
+         "MDP_Y_CRCB_H2V1",
+         "MDP_Y_CBCR_H2V1",
+-- 
+2.5.0
+

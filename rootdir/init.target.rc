@@ -21,11 +21,6 @@ on boot
     chown system system /sys/devices/i2c-12/12-0054/threshold
     chown system system /sys/devices/i2c-12/12-0054/nburst
 
-    # Vibrator
-    chown root system /sys/class/timed_output/vibrator/level
-    chmod 0664 /sys/class/timed_output/vibrator/level
-    restorecon /sys/class/timed_output/vibrator/level
-
     # Permissions for LSM330D sensor
     chown system system /sys/devices/i2c-12/12-0019/pollrate_ms
     chmod 0664 /sys/devices/i2c-12/12-0019/pollrate_ms
@@ -42,4 +37,5 @@ on boot
     write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/finger_threshold 280
     chown system system /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
     chmod 0664 /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity
+    write /sys/devices/i2c-3/3-0024/main_ttsp_core.cyttsp4_i2c_adapter/signal_disparity 0
 

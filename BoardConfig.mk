@@ -13,9 +13,9 @@
 # limitations under the License.
 
 # Inherit from Sony common
-include device/sony/common/BoardConfigCommon.mk
+include device/sony/lbcommon/BoardConfigCommon.mk
 
-TARGET_SPECIFIC_HEADER_PATH += device/sony/huashan/include
+TARGET_SPECIFIC_HEADER_PATH += device/sony/lbhuashan/include
 
 # Architecture
 TARGET_ARCH := arm
@@ -25,8 +25,8 @@ TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_VARIANT := krait
 
 # Kernel properties
-TARGET_KERNEL_SOURCE := kernel/sony/msm8960t
-TARGET_KERNEL_CONFIG := cm_viskan_huashan_defconfig
+TARGET_KERNEL_SOURCE := kernel/sony/lbmsm8960t
+TARGET_KERNEL_CONFIG := viskan_huashan_defconfig
 
 # Platform
 TARGET_BOOTLOADER_BOARD_NAME := MSM8960
@@ -63,7 +63,7 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 
 BOARD_USE_SONY_MACUPDATE := true
 
-BOARD_HARDWARE_CLASS := device/sony/huashan/cmhw
+BOARD_HARDWARE_CLASS := device/sony/lbhuashan/cmhw
 
 BOARD_USES_QCOM_HARDWARE := true
 
@@ -93,7 +93,7 @@ SOMC_CFG_SENSORS_PROXIMITY_APDS9702 := yes
 BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
-BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/sony/huashan/bluetooth
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := device/sony/lbhuashan/bluetooth
 
 # Power HAL
 TARGET_POWERHAL_VARIANT := qcom
@@ -101,17 +101,7 @@ CM_POWERHAL_EXTENSION := qcom
 
 # RIL
 BOARD_PROVIDES_LIBRIL := true
-BOARD_RIL_CLASS := ../../../device/sony/huashan/ril/
-
-# Healthd
-BOARD_CHARGER_ENABLE_SUSPEND := true
-BOARD_CHARGER_DISABLE_INIT_BLANK := true
-BOARD_HEALTHD_CUSTOM_CHARGER_RES := device/sony/huashan/charger/images
-BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight1/brightness
-SECONDARY_BACKLIGHT_PATH := /sys/devices/i2c-10/10-0040/leds/lcd-backlight2/brightness
-RED_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_R/brightness
-GREEN_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_G/brightness
-BLUE_LED_PATH := /sys/devices/i2c-10/10-0047/leds/LED1_B/brightness
+BOARD_RIL_CLASS := ../../../device/sony/lbhuashan/ril/
 
 # Needed for blobs
 TARGET_RELEASE_CPPFLAGS += -DNEEDS_VECTORIMPL_SYMBOLS
@@ -121,26 +111,26 @@ TARGET_USE_CUSTOM_LUN_FILE_PATH := /sys/devices/platform/msm_hsusb/gadget/lun%d/
 
 # Custom boot
 TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-BOARD_CUSTOM_BOOTIMG_MK := device/sony/huashan/custombootimg.mk
+BOARD_CUSTOM_BOOTIMG_MK := device/sony/lbhuashan/custombootimg.mk
 BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_15x24.h\"
 
-TARGET_RECOVERY_FSTAB := device/sony/huashan/rootdir/fstab.qcom
+TARGET_RECOVERY_FSTAB := device/sony/lbhuashan/rootdir/fstab.qcom
 RECOVERY_FSTAB_VERSION := 2
 
 BOARD_FLASH_BLOCK_SIZE := 131072
 BOARD_HAS_NO_SELECT_BUTTON := true
 TARGET_USERIMAGES_USE_EXT4 := true
-TARGET_USERIMAGES_USE_F2FS := true
 
 # Assert
-TARGET_OTA_ASSERT_DEVICE := C5302,C5303,C5306,huashan
+TARGET_OTA_ASSERT_DEVICE := lbC5302,lbC5303,lbC5306,lbhuashan
+TARGET_RELEASETOOL_OTA_FROM_TARGET_SCRIPT := device/sony/lbhuashan/releasetools/ota_from_target_files
 
 # Display HAL
 USE_OPENGL_RENDERER := true
 TARGET_USES_ION := true
 TARGET_USES_C2D_COMPOSITION := true
 
-TARGET_DISPLAY_USE_RETIRE_FENCE := true
+#TARGET_DISPLAY_USE_RETIRE_FENCE := true
 NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 # Audio
@@ -172,7 +162,7 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 2147483648
 -include device/qcom/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += \
-    device/sony/huashan/sepolicy
+    device/sony/lbhuashan/sepolicy
 
 BOARD_SEPOLICY_UNION += \
     file_contexts \
@@ -205,4 +195,4 @@ BOARD_SEPOLICY_UNION += \
     vold.te
 
 # inherit from the proprietary version
--include vendor/sony/huashan/BoardConfigVendor.mk
+-include vendor/lbsony/huashan/BoardConfigVendor.mk

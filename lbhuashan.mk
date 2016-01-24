@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-DEVICE_PACKAGE_OVERLAYS += device/sony/huashan/overlay
+DEVICE_PACKAGE_OVERLAYS += device/sony/lbhuashan/overlay
 
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xhdpi
@@ -38,8 +38,8 @@ PRODUCT_COPY_FILES += \
 
 # Device specific init scripts
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/zram.sh:root/zram.sh \
     $(LOCAL_PATH)/rootdir/init.qcom.rc:root/init.qcom.rc \
-    $(LOCAL_PATH)/rootdir/init.qcom.power.rc:root/init.qcom.power.rc \
     $(LOCAL_PATH)/rootdir/init.target.rc:root/init.target.rc \
     $(LOCAL_PATH)/rootdir/fstab.qcom:root/fstab.qcom \
     $(LOCAL_PATH)/rootdir/fstab.qcom:recovery/root/fstab.qcom \
@@ -53,20 +53,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/sbin/wait4tad_static:root/sbin/wait4tad_static \
     $(LOCAL_PATH)/rootdir/sbin/tad_static:root/sbin/tad_static
 
-# Key layouts
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/usr/idc/cyttsp4_mt.idc:system/usr/idc/cyttsp4_mt.idc \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/cyttsp-i2c.kl:system/usr/keylayout/cyttsp-i2c.kl \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/keypad_8960.kl:system/usr/keylayout/keypad_8960.kl \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/keypad_8960_liquid.kl:system/usr/keylayout/keypad_8960_liquid.kl \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/msm8960-snd-card_Button_Jack.kl:system/usr/keylayout/msm8960-snd-card_Button_Jack.kl \
-    $(LOCAL_PATH)/rootdir/system/usr/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
-
-# Audio
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/audio_policy.conf:system/etc/audio_policy.conf \
-    $(LOCAL_PATH)/rootdir/system/etc/snd_soc_msm/snd_soc_msm_2x:system/etc/snd_soc_msm/snd_soc_msm_2x
 
 # Media
 PRODUCT_COPY_FILES += \
@@ -76,42 +62,14 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/system/etc/media_codecs.xml:system/etc/media_codecs.xml \
     $(LOCAL_PATH)/rootdir/system/etc/media_profiles.xml:system/etc/media_profiles.xml
 
-# GPS
-PRODUCT_COPY_FILES += \
-   $(LOCAL_PATH)/rootdir/system/etc/gps.conf:system/etc/gps.conf
-
-# WPA supplicant config
-PRODUCT_COPY_FILES += \
-   $(LOCAL_PATH)/rootdir/system/etc/wifi/wpa_supplicant_overlay.conf:system/etc/wifi/wpa_supplicant_overlay.conf \
-   $(LOCAL_PATH)/rootdir/system/etc/wifi/p2p_supplicant_overlay.conf:system/etc/wifi/p2p_supplicant_overlay.conf
-
-# Touchpad
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/usr/idc/clearpad.idc:system/usr/idc/clearpad.idc
 
 # USB function switching
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/rootdir/init.sony.usb.rc:root/init.sony.usb.rc
 
-# Sensors
+# System
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/sensors.conf:system/etc/sensors.conf \
-    $(LOCAL_PATH)/rootdir/system/etc/sap.conf:system/etc/sap.conf
-
-# SEC Config
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/sec_config:system/etc/sec_config
-
-# HW Settings
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/hw_config.sh:system/etc/hw_config.sh
-
-# Thermal monitor configuration
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/thermanager.xml:system/etc/thermanager.xml
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/rootdir/system/etc/hostapd/hostapd_default.conf:system/etc/hostapd/hostapd_default.conf
+    $(call find-copy-subdir-files,*,$(LOCAL_PATH)/rootdir/system,system)
 
 # SONY TrimArea library
 PRODUCT_PACKAGES += \
@@ -132,15 +90,6 @@ PRODUCT_PACKAGES += \
 # Recovery
 PRODUCT_PACKAGES += \
     extract_elf_ramdisk
-
-# NFCEE access control
-ifeq ($(TARGET_BUILD_VARIANT),user)
-    NFCEE_ACCESS_PATH := $(LOCAL_PATH)/rootdir/system/etc/nfcee_access.xml
-else
-    NFCEE_ACCESS_PATH := $(LOCAL_PATH)/rootdir/system/etc/nfcee_access_debug.xml
-endif
-PRODUCT_COPY_FILES += \
-    $(NFCEE_ACCESS_PATH):system/etc/nfcee_access.xml
 
 # Media
 PRODUCT_PACKAGES += \
@@ -208,14 +157,6 @@ PRODUCT_PACKAGES += \
     libmmcamera_interface \
     libmmcamera_interface2
 
-# Healthd
-PRODUCT_PACKAGES += \
-    charger_res_images
-
-# Allows healthd to boot directly from charger mode rather than initiating a reboot.
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    ro.enable_boot_charger_mode=1
-
 # Force use old camera api
 PRODUCT_PROPERTY_OVERRIDES += \
     camera2.portability.force_api=1
@@ -270,73 +211,24 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.isUsbOtgEnabled=true
 
-# Radio and Telephony
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.ril.transmitpower=true \
-    persist.radio.add_power_save=1 \
-    ro.telephony.ril_class=SonyRIL \
-    rild.libpath=/system/lib/libril-qc-qmi-1.so
+# semc
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    ro.semc.version.sw=1272-3352 \
+    ro.semc.version.sw_revision=12.1.A.1.207 \
+    ro.semc.version.sw_variant=GENERIC \
+    ro.semc.version.sw_type=user \
 
 # Perfd
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.vendor.extension_library=libqti-perfd-client.so
 
-# Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=320 \
-    debug.composition.type=c2d \
-    persist.hwc.mdpcomp.enable=true
-
-# DRM
-PRODUCT_PROPERTY_OVERRIDES += \
-    drm.service.enabled=true
-
-# Audio
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.audio.fluence.mode=endfire \
-    persist.audio.handset.mic=digital \
-    persist.audio.lowlatency.rec=false \
-    af.resampler.quality=255 \
-    ro.qc.sdk.audio.fluencetype=fluence
-
 # QCOM
 PRODUCT_PROPERTY_OVERRIDES += \
     com.qc.hardware=true
 
-# QCOM Location
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qc.sdk.izat.premium_enabled=0 \
-    ro.qc.sdk.izat.service_mask=0x4 \
-    persist.gps.qc_nlp_in_use=0 \
-    ro.gps.agps_provider=1
-
-# Bluetooth
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.qualcomm.bt.hci_transport=smd \
-    ro.bt.bdaddr_path=/data/misc/bluetooth_bdaddr \
-    qcom.bt.le_dev_pwr_class=1
-
-# WiFi
-PRODUCT_PROPERTY_OVERRIDES += \
-    wlan.driver.ath=0 \
-    wifi.interface=wlan0 \
-    wifi.supplicant_scan_interval=15
-
-# Do not power down SIM card when modem is sent to Low Power Mode.
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.radio.apm_sim_not_pwdn=1
-
-# Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.telephony.call_ring.multiple=0
-
-# OpenGL ES 3.0
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.opengles.version=196608
-
 # call dalvik heap config
 $(call inherit-product-if-exists, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
 
-# Include non-opensource parts
-$(call inherit-product, vendor/sony/huashan/huashan-vendor.mk)
+# Include non-opensource parts/ proprietary files
+$(call inherit-product, vendor/lbsony/huashan/huashan-vendor.mk)
 

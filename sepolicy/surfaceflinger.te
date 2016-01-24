@@ -1,1 +1,2 @@
 allow surfaceflinger gpu_device:chr_file { open read write };
+allow surfaceflinger kernel:unix_stream_socket { read write };

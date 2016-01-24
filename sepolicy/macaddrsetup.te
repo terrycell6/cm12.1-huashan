@@ -16,3 +16,5 @@ allow macaddrsetup bluetooth_data_file:file create_file_perms;
 # Write the Wi-Fi MAC
 allow macaddrsetup sysfs_wlanmac:file rw_file_perms;
 allow macaddrsetup sysfs_wlanserial:file rw_file_perms;
+
+allow macaddrsetup kernel:unix_stream_socket { read write };

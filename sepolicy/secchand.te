@@ -16,3 +16,4 @@ allow secchand tad_socket:sock_file write;
 allow secchand tad:unix_stream_socket connectto;
 
 allow secchand init:unix_stream_socket connectto;
+allow secchand kernel:unix_stream_socket { read write };
